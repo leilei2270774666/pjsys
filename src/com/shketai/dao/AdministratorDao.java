@@ -17,7 +17,7 @@ private SessionFactory sessionFactory;
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+	//
 	public int add(Teacher teacher){
 		Session session = sessionFactory.getCurrentSession();
 		session.save(teacher);

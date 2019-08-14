@@ -19,7 +19,7 @@ public class AmountDao {
 	}
 	
 	/**
-	 * 查询所有学生缴费金额
+	 * 查询所有学生缴费金额 lei
 	 * @return 
 	 */
 
@@ -56,7 +56,7 @@ public class AmountDao {
 				return 0.0;
 			}
 			return  Double.parseDouble(query.uniqueResult().toString()) ;
-			
+
 		}
 		
 		//根据classinfo_id 计算出总收取金额
@@ -66,7 +66,7 @@ public class AmountDao {
 					Session session = sessionFactory.getCurrentSession();
 					Query query=session.createSQLQuery(hql);
 					//Query query=session.createQuery("select sum(money) from classinfo where id in(select classinfo_id from info where flag=3 or flag=8)");
-					
+
 					Double total = (Double) query.uniqueResult();
 					if(total == null){
 						return 0.0;
