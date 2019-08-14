@@ -19,7 +19,7 @@ public class AmountDao {
 	}
 	
 	/**
-	 * 查询所有学生缴费金额 lei
+	 * 查询所有学生缴费金额
 	 * @return 
 	 */
 
