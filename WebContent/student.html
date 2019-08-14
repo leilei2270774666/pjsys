@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="renderer" content="webkit">
+  <title>浦江镇青少年教育培训中心学生端</title>
+  <link rel="shortcut icon" href="./img/bitbug_favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="./css/normalize.css">
+  <link rel="stylesheet" href="./css/student.css">
+  <link rel="stylesheet" href="./js/layui-v2.3.0-rc1/layui/css/layui.css">
+  <style>
+    .r {
+      display: none;
+    }
+
+    .r:nth-of-type(1) {
+      display: inline-block;
+    }
+
+    .red {
+      color: red;
+    }
+
+    .r-tbody {
+      text-align: center;
+    }
+
+    #xs_update {
+      padding: 6px 10px;
+      margin: 0 6px;
+      background: #009688;
+      font-size: 14px;
+      border-radius: 6px;
+      color: white;
+      transition: all .3s;
+    }
+
+    .bg {
+      padding: 3px 8px;
+      margin: 0 6px;
+      background: #009688;
+      font-size: 14px;
+      border-radius: 4px;
+      color: white;
+      /* transition: all .3s; */
+    }
+
+    .bg:hover {
+      background: #289688;
+    }
+
+    .del-bg {
+      padding: 3px 8px;
+      margin: 0 6px;
+      background: #F44336;
+      font-size: 14px;
+      border-radius: 4px;
+      color: white;
+      /* transition: all .3s; */
+    }
+
+    .del-bg:hover {
+      background: #f46155;
+    }
+
+    #xs_delete {
+      padding: 6px 10px;
+      margin: 0 6px;
+      background: #F44336;
+      font-size: 14px;
+      border-radius: 6px;
+      color: white;
+      transition: all .3s;
+    }
+
+    #xs_update:hover {
+      background: #289688;
+    }
+
+    #xs_delete:hover {
+      background: #f46155;
+    }
+
+    .xg-bg {
+      border: 1px solid #009688;
+      color: #fff;
+      background: #009688;
+      font-size: 14px;
+      border-radius: 4px;
+      padding: 3px 8px;
+      margin: 0 6px;
+    }
+
+    .xk-bgs {
+      background: #65daf7;
+    }
+
+    .layui-tab-content {
+      padding: 0;
+    }
+
+    .layui-tab-content table thead {
+      text-align: center;
+    }
+    .newsLi{
+      position: relative;
+    }
+    .spans{
+      position: absolute;
+      top: -9px;
+      right: -9px;
+      /* background: ; */
+    }
+    .demo-class{
+      border-radius: 5px !important;;
+    }
+    .demo-class .layui-layer-title{
+      font-size: 30px;
+    }
+  .demo-class .layui-layer-content{
+    padding: 0 20px !important;
+    font-size: 24px;
+  }
+  </style>
+</head>
+
+<body >
+    <!-- logo占位符 -->
+    <header>
+      <div class="logo">
+        <!-- 浦江镇青少年教育培训中心 -->
+        <img src="./img/headerbg.jpg" alt="" style="width: 100%;height: 115px;">
+        <img src="./img/wz.png" alt="" class="img1">
+        <!-- <div class="news">
+          <span class="layui-badge spans"></span>
+          <button class="btn-news">未读消息</button>
+        </div> -->
+        <button class="del-id">退出账号</button>
+      </div>
+    </header>
+    <!-- 侧边栏 -->
+    <div class="clearfix" style="margin: 0 auto;width: 1440px;">
+      <!-- 侧边栏 -->
+      <aside>
+        <ul class="aside-ul">
+          <li class="aside-ul-li">个人信息
+            <img src="./img/arrow.png" alt="箭头导航">
+            <dl style="display: none">
+              <dd class="a1">学生信息</dd>
+              <dd class="a2">添加学生</dd>
+            </dl>
+          </li>
+          <li class="aside-ul-li">兴趣小组
+            <img src="./img/arrow.png" alt="箭头导航">
+            <dl style="display: none">
+              <dd class="a3">课程选择</dd>
+              <dd class="a5">预约记录</dd>
+              <dd class="a4">我的课程</dd>
+            </dl>
+          </li>
+          <!-- <li class="aside-ul-li">课程管理
+            <img src="./img/arrow.png" alt="箭头导航">
+            <dl style="display: none">
+              <dd class="a6">课程缴费</dd>
+              <dd class="a7">课程续费</dd>
+              <dd class="a8">课程退班</dd>
+              <dd class="a9">课程退费</dd>
+            </dl>
+          </li> -->
+          <li class="aside-ul-li">学习情况
+            <img src="./img/arrow.png" alt="箭头导航">
+            <dl style="display: none">
+              <dd class="a10">我的考勤</dd>
+              <dd class="a11">学习日历</dd>
+            </dl>
+          </li>
+          <li class="aside-ul-li newsLi">最新通知
+            <span class="layui-badge spans"></span>
+            <img src="./img/arrow.png" alt="箭头导航">
+            <dl style="display: none">
+              <dd class="a12">最新通知</dd>
+            </dl>
+          </li>
+        </ul>
+      </aside>
+      <div class="right clearfix" id="right" style="width: 1238px;float: right; padding-bottom: 80px">
+        <div class="rl">
+          <div class="r-wenzi">
+            <span>最新通知</span>
+          </div>
+          <div style="padding: 20px;">
+            <div class="layui-row layui-col-space15">
+            </div>
+          </div>
+        </div>
+
+        <!-- 学生信息-->
+        <div class="r " style="display: none;">
+          <div class="r-wenzi">
+            <span>学生信息</span>
+          </div>
+          <table class="r-table">
+            <thead class="r-thead">
+              <tr class="r-thead-tr">
+                <th>学生姓名</th>
+                <th>性别</th>
+                <th>生日</th>
+                <th>身份证号</th>
+                <th>家庭住址</th>
+                <th>家长姓名</th>
+                <th>手机号</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="frxx_form" class="r-tbody">
+    
+    
+            </tbody>
+          </table>
+        </div>
+        <!-- 学生信息修改 -->
+        <div class="fade xg-fade-student" style="display: none;">
+          <div class="fade-center fade-student-center">
+    
+            <span>学生信息修改</span>
+    
+            <div>
+              <label for="xg-student">学生姓名:</label>
+              <input type="hidden" id="xgxsid" name="id" class="input" value="">
+              <input type="text" name="stuName" id='xg-student' class="input">
+            </div>
+            <div>
+              <label for="xg-sex">性别:</label>
+              <input type="radio" name="sex" value="1" checked="checked" id="xg-sex" class="sex">男&emsp;&emsp;
+              <input type="radio" name="sex" value="2" class="sex">女
+            </div>
+            <div>
+              <label for="xg-sfzh">身份证号:</label>
+              <input type="text" name="personalNum" id="xg-sfzh" class="input">
+            </div>
+            <div>
+              <label for="xg-family-name">在读学校:</label>
+              <input type="text" name="schoolname" id="xg-zdxx" class="input">
+            </div>
+            <div>
+              <label for="xg-address">家庭住址:</label>
+              <input type="text" name="address" id="xg-address" class="input">
+            </div>
+            <div>
+              <label for="xg-yb">邮编:</label>
+              <input type="text" name="postcode" id="xg-yb" class="input">
+            </div>
+            <div>
+              <label for="xg-family-name">家长姓名:</label>
+              <input type="text" name="parent" id="xg-family-name" class="input">
+            </div>
+    
+            <div>
+              <label for="xg-family-tel">手机号:</label>
+              <input type="text" name="mobilephone" id="xg-family-tel" class="input">
+            </div>
+            <div>
+              <label for="xg-family-name1">备用联系人:</label>
+              <input type="text" name="EmergencyContactName" id="xg-family-name1" class="input">
+            </div>
+            <div>
+              <label for="xg-family-tel1">备用手机号:</label>
+              <input type="text" name="EmergencyContactPhone" id="xg-family-tel1" class="input">
+            </div>
+            <div>
+              <label for="xg-family-tel1">工作单位:</label>
+              <input type="text" name="workaddress" id="xg-gzdw" class="input">
+            </div>
+    
+            <div>
+              <button class="xg-student-btn-del">取消</button>
+              <button class="xg-student-btn">修改</button>
+            </div>
+          </div>
+        </div>
+        <!-- 添加学生 -->
+        <div class="r" style="display:none">
+          <div class="r-wenzi">
+            <span>添加学生</span>
+          </div>
+          <form id="add_xsform" onsubmit="return false" method="post" class='add-form'>
+            <b style="color: red">温馨提醒:以下关乎您孩子的个人信息,请务必如实填写,带有红色标记的均为必填项,谢谢合作</b>
+            <input id="user_id" type="hidden" name="user_id" value="">
+    
+            <div>
+              <label for="stuName">
+                <i>*</i>学生姓名:</label>
+              <input type="text" name="stuName" id="stuName" class="input">
+            </div>
+    
+            <div>
+              <label for="sex">
+                <i>*</i>性别:</label>
+              <input type="radio" name="sex" value="1" id="sex" checked="checked" class="sex">男&emsp;&emsp;
+              <input type="radio" name="sex" value="2" class="sex">女
+            </div>
+    
+            <div>
+              <label for="sfzh">
+                <i>*</i>身份证号:</label>
+              <input name="personalNum" type="text" id="sfzh" class="input sfzh">
+            </div>
+    
+    
+            <div>
+              <label for="school">
+                <i>*</i>在读学校:</label>
+              <input name="schoolname" type="text" id="school" class="input school">
+            </div>
+    
+            <div>
+              <label for="home">
+                <i>*</i>家庭住址:</label>
+              <input name="Address" type="text" id="home" class="input jtzz">
+            </div>
+            <div>
+              <label for="postcode">
+                <i>*</i>邮编:</label>
+              <input name="postcode" type="text" id="postcode" class="input yb">
+            </div>
+            <div>
+              <label for="family-name1">
+                <i>*</i>家长姓名:</label>
+              <input name="parent" type="text" id="family-name1" class="input jzxm1">
+            </div>
+    
+            <div>
+              <label for="family-tel1">
+                <i>*</i>家长手机号:</label>
+              <input name="mobilephone" type="text" id="family-tel1" class="input tel1">
+              <span style="color: red">需和登录手机号一致</span>
+            </div>
+    
+            <div>
+              <label for="family-name">
+                <i>*</i>备用联系人姓名:</label>
+              <input name="EmergencyContactName" type="text" id="family-name" class="input jzxm">
+            </div>
+    
+            <div>
+              <label for="family-tel">
+                <i>*</i>备用联系人电话:</label>
+              <input name="EmergencyContactPhone" type="text" id="family-tel" class="input tel">
+            </div>
+    
+            <div>
+              <label for="workaddress">工作单位:</label>
+              <input name="workaddress" type="text" id="workaddress" class="input gzdw1">
+            </div>
+    
+            <!-- <input id="add_xs_btn" type="submit" value="提交" class="xg-bg add-submit" style="margin-left: 120px;margin-top: 20px;"> -->
+            <div>
+              <span id="add_xs_btn" class="xg-bg add-submit" style="margin-left: 120px;margin-top: 20px;cursor:pointer">添加学生</span>
+            </div>
+          </form>
+        </div>
+        <!-- 选课 -->
+        <div id="add_xk" class="r layui-form" style="display: none;">
+          <div class="r-wenzi layui-form-item">
+            <div class="layui-form-item">
+              <label class="layui-form-label">选课学生:</label>
+              <div class="layui-input-block" style="width: 120px;">
+                <select name="interest" lay-filter="student">
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class=" layui-form-item">
+            <div class="layui-form-item">
+              <label class="layui-form-label">选择学科:</label>
+              <div class="layui-input-block">
+                <div class="subject-all">
+                </div>
+              </div>
+            </div>
+          </div>
+          <table class="r-table">
+            <col width='150'>
+            <col width='150'>
+            <col width='260'>
+            <col width='220'>
+            <col width='120'>
+            <col width='80'>
+            <col width='80'>
+            <col >
+            <thead class="r-thead">
+              <tr class="r-thead-tr">
+                <th>科目</th>
+                <th>班级</th>
+                <!-- <th>是否面试</th> -->
+                <th>适合年龄</th>
+                <th>上课时间</th>
+                <th>教室</th>
+                <th>课时</th>
+                <th>总费用</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody class="r-tbody">
+              <tr class="r-tbody-tr">
+                <td colspan="7">暂无数据</td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="student-subject" style="margin-left: 800px;"></div>
+        </div>
+        <!-- 选课的课程 -->
+        <div class="fade fade-subject" style="display: none;">
+          <div class="fade-subject-center">
+            <p>选课</p>
+            <table class="r-ms-table">
+              <thead class="r-ms-thead">
+                <tr class="r-thead-tr">
+                  <th>
+                    <input type="checkbox" name="" disabled>
+                  </th>
+                  <th width="130">科目</th>
+                  <th>班级</th>
+                  <th>课时</th>
+                  <th>课时费</th>
+                  <th>总费用</th>
+                </tr>
+              </thead>
+              <tbody class="alert_km">
+    
+              </tbody>
+            </table>
+            <button class="btn btn-subject-del">
+              取消
+            </button>
+            <button class="btn btn-subject">
+              选择
+            </button>
+          </div>
+        </div>
+        <!-- 我的课程-->
+        <div class="r r-my-subject" style="display: none;">
+          <div class="r-wenzi">
+            <span>我的课程</span>
+          </div>
+          <table class="r-table" style="width: 100%;">
+            <col width='100'>
+            <col width='100'>
+            <col width='150'>
+            <col width='150'>
+            <col width='100'>
+            <col width='100'>
+            <col width='100'>
+            <col>
+            <col width='150'>
+            <thead class="r-thead">
+              <tr class="r-thead-tr">
+                <th>姓名</th>
+                <th>科目</th>
+                <th>班级</th>
+                <th>上课时间</th>
+                <th>上课地点</th>
+                <th>课时</th>
+                <th>总费用</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody class="r-tbody">
+            </tbody>
+          </table>
+        </div>
+        <!-- 预约面试-->
+        <div class="r r-interview" style="display:none">
+          <div class="r-wenzi">
+            <span>预约面试</span>
+            <!-- <button class='ms btn'>面试申请</button> -->
+          </div>
+          <table class="r-table">
+            <thead class="r-thead">
+              <tr class="r-thead-tr">
+                <th>姓名</th>
+                <th>科目</th>
+                <th>预约开始时间</th>
+                <th>预约结束时间</th>
+                <th>面试结果</th>
+              </tr>
+            </thead>
+            <tbody class="r-tbody r-tbody-ms">
+    
+            </tbody>
+          </table>
+        </div>
+        <!-- 面试科目 -->
+        <div class="r-ms r-ms-kemu" style="display:none">
+          <div class="r-ms-center layui-form">
+            <p>科目选择</p>
+            <!-- <table class="r-ms-table"> -->
+              <!-- <tbody>
+                <tr class="r-ms-tbody-tr">
+                  <td style="width: 100px;">
+                    学生列表：
+                  </td>
+                  <td>
+                    <select id="ms_xs" style="width: 250px;height: 40px;text-align: center;display: inline-block;">
+    
+                    </select>
+                  </td>
+                </tr>
+                <tr class="r-ms-tbody-tr">
+                  <td style="width: 100px;">
+                    科目分类：
+                  </td>
+                  <td>
+                    <select id="ms_km" style="width: 250px;height: 40px;text-align: center;display: inline-block;">
+    
+                    </select>
+                  </td>
+                </tr>
+    
+                <tr class="r-ms-tbody-tr">
+                  <td style="width: 100px;">
+                    面试时间：
+                  </td>
+                  <td>
+                    <select id="ms_tme" style="width: 250px;height: 40px;text-align: center;display: inline-block;font-size: 14px;">
+    
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table> -->
+              <div class="layui-form-item" >
+                <label class="layui-form-label">学生列表:</label>
+                <div class="layui-input-block" style="width: 240px;margin-top: 20px">
+                  <select id="interview-student" name="interview-student"  lay-verify="required">
+                    <!-- <option value=""></option>
+                    <option value="0">北京</option>
+                    <option value="1">上海</option>
+                    <option value="2">广州</option>
+                    <option value="3">深圳</option>
+                    <option value="4">杭州</option> -->
+                  </select>
+                </div>
+            </div>
+              <div class="layui-form-item" >
+                <label class="layui-form-label">面试科目:</label>
+                <div class="layui-input-block" style="width: 240px;">
+<select id="interview-subject" name="interview-subject" lay-filter="interview-subject" lay-verify="required">
+                    <!-- <option value=""></option>
+                    <option value="0">北京</option>
+                    <option value="1">上海</option>
+                    <option value="2">广州</option>
+                    <option value="3">深圳</option>
+                    <option value="4">杭州</option> -->
+                  </select>
+                </div>
+            </div>
+              <div class="layui-form-item" >
+                <label class="layui-form-label">面试时间:</label>
+                <div class="layui-input-block" style="width: 240px;">
+                  <select id="interview-time" name="interview-time" lay-verify="required">
+                    <!-- <option value=""></option>
+                    <option value="0">北京</option>
+                    <option value="1">上海</option>
+                    <option value="2">广州</option>
+                    <option value="3">深圳</option>
+                    <option value="4">杭州</option> -->
+                  </select>
+                </div>
+            </div>
+            <div style="margin:20px 0;">
+              <button class="btn r-ms-kemu-btn-del" style="margin:0 100px 0 100px">
+                取消
+              </button>
+              <button class="btn r-ms-kemu-btn">
+                提交
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- 缴费-->
+        <div class="r" style="display:none">
+          <div class="r-wenzi">
+            <span>缴费</span>
+          </div>
+          <table class="r-table">
+            <thead class="r-thead">
+              <tr class="r-thead-tr">
+                <th>姓名</th>
+                <th>科目</th>
+                <th>班级</th>
+                <th>金额</th>
+                <th>缴费状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="jf_box" class="r-tbody r-jf-tbody">
+    
+            </tbody>
+          </table>
+          <div class="jf-div">
+            <!-- <button id="jf_all_btn" class="btn btn-all">全选</button>
+                                    <span class="jf-span1">总计金额:</span>
+                                    <span class="jf-span2 jf-je">0</span> -->
+            <button class="btn btn-sub btn-jf" id="jf_btn">申请缴费</button>
+          </div>
+        </div>
+        <!-- 续费 -->
+        <div class="r" style="display:none">
+          <div class="r-wenzi">
+            <span>续费</span>
+          </div>
+          <table class="r-table">
+            <thead class="r-thead">
+              <tr class="r-thead-tr">
+                <th>姓名</th>
+                <th>科目</th>
+                <th>班级</th>
+                <th>金额</th>
+                <th>续费状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="xf_box" class="r-tbody">
+            </tbody>
+          </table>
+          <div class="jf-div">
+            <!-- <button class="btn btn-all btn-xf-all">全选</button>
+                        <span class="jf-span1">总计金额:</span>
+                        <span class="jf-span2 tf-je">0</span> -->
+            <button class="btn btn-sub btn-xf">申请续费</button>
+          </div>
+        </div>
+        <!-- 申请退班 -->
+        <div id="eix_b" class="r" style="display:none">
+          <div class="r-wenzi">
+            <span>申请退班</span>
+          </div>
+          <table class="r-table">
+            <thead class="r-thead">
+              <tr class="r-thead-tr">
+                <th>学生姓名</th>
+                <th>科目名称</th>
+                <th>教室</th>
+                <th>班级名</th>
+                <th>每节课时费</th>
+                <th>总课时</th>
+                <th>总费用</th>
+                <th>状态</th>
+                <th>退班</th>
+              </tr>
+            </thead>
+            <tbody class="r-tbody r-tbody-tuike">
+    
+            </tbody>
+          </table>
+        </div>
+        <!-- 退费 -->
+        <div class="r" style="display:none">
+          <div class="r-wenzi">
+            <span>退费</span>
+          </div>
+          <table class="r-table">
+            <thead class="r-thead">
+              <tr class="r-thead-tr">
+                <th>姓名</th>
+                <th>科目</th>
+                <th>班级</th>
+                <th>金额</th>
+                <th>退费状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="ext_tf" class="r-tbody">
+            </tbody>
+          </table>
+          <div class="jf-div">
+            <button class="btn btn-sub btn-tf">申请退费</button>
+          </div>
+        </div>
+        <!-- 考勤 -->
+        <div class="r r-kaoqin">
+          <div class="r-wenzi">
+            <span>考勤</span>
+          </div>
+          <div class="layui-tab layui-tab-brief" lay-filter="kaoqin">
+            <ul class="layui-tab-title">
+              <li class="layui-this">考勤汇总</li>
+              <li>缺勤日期</li>
+            </ul>
+            <div class="layui-tab-content">
+              <div class="layui-tab-item layui-show">
+                <table class="r-table">
+                  <thead class="r-thead">
+                    <tr class="r-thead-tr">
+                      <th>出勤学生</th>
+                      <th>出勤天数</th>
+                      <th>缺勤次数</th>
+                    </tr>
+                  </thead>
+                  <tbody id="kq_box" class="r-tbody">
+                  </tbody>
+                </table>
+              </div>
+              <div class="layui-tab-item">
+                <table class="r-table">
+                  <thead class="r-thead">
+                    <tr class="r-thead-tr">
+                      <th>缺勤人员</th>
+                      <th>缺勤日期</th>
+                      <th>缺勤原因</th>
+                    </tr>
+                  </thead>
+                  <tbody id='kq' class="r-tbody">
+    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+    
+        </div>
+        <!-- 日历 -->
+        <div class="r">
+          <div class="r-wenzi">
+            <span>学习日历</span>
+          </div>
+          <div class="pic" style="width: 1220px;margin-top: 20px;">
+            <!-- <img  style="width: 100%;" src="./img/rili.jpg" alt="学习日历"> -->
+          </div>
+        </div>
+        <!-- 消息 -->
+        <div class="r r-news" style="display:none">
+          <div class="r-wenzi">
+            <span style="cursor: pointer;">系统消息</span>
+          </div>
+          <div class="layui-tab layui-tab-brief" style="width: 100%;" lay-filter="news-tab">
+            <ul class="layui-tab-title">
+              <li class="layui-this">站内消息</li>
+              <li>班级消息</li>
+              <li>面试消息</li>
+            </ul>
+            <div class="layui-tab-content">
+              <div class="layui-tab-item layui-show">
+                <table class="r-table">
+                  <col width='60'>
+                  <col width='140'>
+                  <col>
+                  <col width='150'>
+                  <col width='85'>
+                  <col width='300'>
+                  <thead class="r-thead">
+                    <tr class="r-thead-tr" >
+                      <th style="width: 20px;">
+                        <input type="checkbox" name="news" id="">
+                      </th>
+                      <th>标题</th>
+                      <th>内容</th>
+                      <th>日期</th>
+                      <th>状态</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody class="r-tbody r-tbody-all">
+                  </tbody>
+                </table>
+                <div>
+                    <!-- <button class="bg news-red">标记已读</button> -->
+                    <button class="del-bg news-del">删除消息</button>
+                  <span id="news" style="margin-left: 800px;"></span>
+                </div>
+                
+              </div>
+              <div class="layui-tab-item">
+                <div class="layui-form-item">
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">选择学生:</label>
+                    <div class="layui-input-block">
+                      <div class="student-news">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="layui-tab-item layui-show">
+                    <table class="r-table r-table-class" style="width: 1220px;">
+                      <col width='140'>
+                      <col>
+                      <col width='200'>
+                      <col width='200'>
+                      <thead class="r-thead">
+                        <tr class="r-thead-tr">
+                          <th>标题</th>
+                          <th>内容</th>
+                          <th>日期</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody class="r-tbody">
+                      </tbody>
+                    </table>
+                    <div id="news-student" style="margin-left: 800px;"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="layui-tab-item">
+                <div class="layui-form-item">
+                  <div class="layui-form-item">
+                    <label class="layui-form-label">选择学生:</label>
+                    <div class="layui-input-block">
+                      <div class="student-Interview">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="layui-tab-item layui-show">
+                    <table class="r-table r-table-Interview" style="width: 1220px;">
+                      <col width='140'>
+                      <col>
+                      <col width='200'>
+                      <col width='200'>
+                      <thead class="r-thead">
+                        <tr class="r-thead-tr">
+                          <th>标题</th>
+                          <th>内容</th>
+                          <th>日期</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody class="r-tbody">
+                      </tbody>
+                    </table>
+                    <div id="news-Interview" style="margin-left: 800px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    </div>
+<footer style="height: 60px;background: #74b9ff; opacity: 0.8;position: fixed; bottom: 0 ;width:100%;padding-bottom: 10px;color:#000">
+<!-- <footer style="height: 60px;background: #1DB7FF; position: fixed; bottom: 0 ;width:100%;padding-bottom: 10px;color:#333"> -->
+<!-- <footer style="height: 60px;background: #39B8ED;; position: fixed; bottom: 0 ;width:100%;padding-bottom: 10px;color:#333"> -->
+      <p style="text-align: center;padding-top: 10px;margin-bottom: 10px;">
+      <span>&emsp;教务热线1：021-64297817</span>&emsp;|
+      <span>&emsp;教务热线2：021-64298197</span>&emsp;|
+      <span>&emsp;技术支持：021-65025211</span>
+      </p>
+      <p style="text-align: center;">
+        <span>©2018浦江镇青少年教育培训中心</span>&emsp;|
+<a href="http://www.miitbeian.gov.cn" target="_blank" style="color:#000">沪ICP备18018412号</a>
+      </p>
+    </footer>
+    </body>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/layui-v2.3.0-rc1/layui/layui.all.js"></script>
+<script src="./js/jquery.cookie.js"></script>
+<script src="./js/student.js"></script>
+</html>

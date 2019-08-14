@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+		<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialPoolSize" value="${initialPoolSize}" />
+		<property name="minPoolSize" value="${minPoolSize}" />
+		<property name="maxPoolSize" value="${maxPoolSize}" />
+		<property name="maxIdleTime" value="${maxIdleTime}" />
+		<property name="idleConnectionTestPeriod" value="${idleConnectionTestPeriod}" />
+		
+	</bean>
+	<context:property-placeholder location="classpath:jdbc.properties" />
+
+
+		<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+				hibernate.show_sql=true
+				hibernate.format_sql=false
+				hibernate.hbm2ddl.auto=update
+			</value>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>com.shketai.entity.Administrator</value>
+				<value>com.shketai.entity.Attence</value>
+				<value>com.shketai.entity.User</value>
+				<value>com.shketai.entity.Classinfo</value>
+				<value>com.shketai.entity.Classroominfo</value>
+				<value>com.shketai.entity.Info</value>
+				<value>com.shketai.entity.Interview_info</value>
+				<value>com.shketai.entity.Interview_timeslot</value>
+				<value>com.shketai.entity.Interview</value>
+				<value>com.shketai.entity.Invoice</value>
+				<value>com.shketai.entity.PhoneCode</value>
+				<value>com.shketai.entity.Student</value>
+				<value>com.shketai.entity.Subject</value>
+				<value>com.shketai.entity.Teacher</value>
+				<value>com.shketai.entity.ClassRoom</value>
+				<value>com.shketai.entity.Majors</value>
+				<value>com.shketai.entity.Reasons</value>
+				<value>com.shketai.entity.DBLogger</value>
+				<value>com.shketai.entity.Imessage</value>
+				<value>com.shketai.entity.ImessageByClass</value>
+				<value>com.shketai.entity.ImessageByInter</value>
+				<value>com.shketai.entity.PictureLibrary</value>
+				<value>com.shketai.entity.HeadMaster</value>
+				<value>com.shketai.entity.Notice</value>
+				<value>com.shketai.entity.Dictionary</value>
+			</list>
+		</property>
+	</bean>
+	
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<aop:config>
+		<aop:pointcut expression="execution(* com.shketai.service.*.*(..))"
+			id="serviceMethods" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
+	</aop:config>
+
+    
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+		
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 家长 -->
+	<bean id="userAction" class="com.shketai.action.UserAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	<bean id="userService" class="com.shketai.service.UserService">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="userDao" class="com.shketai.dao.UserDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!--学生  -->
+	<bean id="studentAction" class="com.shketai.action.StudentAction" scope="prototype">
+		<property name="studentService" ref="studentService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="studentService" class="com.shketai.service.StudentService">
+		<property name="studentDao" ref="studentDao"></property>
+	</bean>
+	<bean id="studentDao" class="com.shketai.dao.StudentDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 课程-->
+	<bean id="subjectAction" class="com.shketai.action.SubjectAction" scope="prototype">
+		<property name="subjectService" ref="subjectService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="subjectService" class="com.shketai.service.SubjectService">
+		<property name="subjectDao" ref="subjectDao"></property>
+		<property name="interviewDao" ref="interviewDao"></property>
+		<property name="interview_timeslotDao" ref="interview_timeslotDao"></property>
+	</bean>
+	<bean id="subjectDao" class="com.shketai.dao.SubjectDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="majorsDao" ref="majorsDao"></property>
+	</bean>
+	<!-- 班级 -->
+	<bean id="classinfoAction" class="com.shketai.action.ClassinfoAction" scope="prototype">
+		<property name="classinfoService" ref="classinfoService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="classinfoService" class="com.shketai.service.ClassinfoService">
+		<property name="classinfoDao" ref="classinfoDao"></property>
+		<property name="infoService" ref="infoService"></property>
+		<property name="attenceService" ref="attenceService"></property>
+		<property name="imessageByClassService" ref="imessageByClassService"></property>
+	</bean>
+	<bean id="classinfoDao" class="com.shketai.dao.ClassinfoDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		
+		<property name="subjectDao" ref="subjectDao"></property>
+		<property name="classroominfoDao" ref="classroominfoDao"></property>
+		<property name="classroomDao" ref="classroomDao"></property>
+	</bean>
+	
+	<!-- 面试科目 -->
+	<bean id="interviewAction" class="com.shketai.action.InterviewAction" scope="prototype">
+		<property name="interviewService" ref="interviewService"></property>
+		<property name="logService" ref="logService"></property>
+		
+		<property name="interview_timeslotService" ref="interview_timeslotService"></property>
+	</bean>
+	<bean id="interviewService" class="com.shketai.service.InterviewService">
+		<property name="interviewDao" ref="interviewDao"></property>
+	</bean>
+	<bean id="interviewDao" class="com.shketai.dao.InterviewDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 预约面试时间段 -->
+	<bean id="interview_timeslotAction" class="com.shketai.action.Interview_timeslotAction" scope="prototype">
+		<property name="interview_timeslotService" ref="interview_timeslotService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="interview_timeslotService" class="com.shketai.service.Interview_timeslotService">
+		<property name="interview_timeslotDao" ref="interview_timeslotDao"></property>
+	</bean>
+	<bean id="interview_timeslotDao" class="com.shketai.dao.Interview_timeslotDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!--面试审核状态  -->
+	<bean id="interview_infoAction" class="com.shketai.action.Interview_infoAction" scope="prototype">
+		<property name="interview_infoService" ref="interview_infoService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="interview_infoService" class="com.shketai.service.Interview_infoService">
+		<property name="interview_infoDao" ref="interview_infoDao"></property>
+	</bean>
+	<bean id="interview_infoDao" class="com.shketai.dao.Interview_infoDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 缴费状态-->
+	<bean id="infoAction" class="com.shketai.action.InfoAction" scope="prototype">
+		<property name="logService" ref="logService"></property>
+		<property name="infoService" ref="infoService"></property>
+		<property name="imessageService" ref="imessageService"></property>
+	</bean>
+	<bean id="infoService" class="com.shketai.service.InfoService">
+		<property name="infoDao" ref="infoDao"></property>
+	</bean>
+	<bean id="infoDao" class="com.shketai.dao.InfoDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		<property name="classinfoDao" ref="classinfoDao"></property>
+		<property name="studentDao" ref="studentDao"></property>
+	</bean>
+
+ <!-- 缴费状态-->
+	<bean id="infosAction" class="com.shketai.action.InfosAction" scope="prototype">
+		<property name="infoService" ref="infoService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="inforAction" class="com.shketai.action.InforAction" scope="prototype">
+		<property name="infoService" ref="infoService"></property>
+
+	</bean>
+
+	<!-- 考勤-->
+	<bean id="attenceAction" class="com.shketai.action.AttenceAction" scope="prototype">
+		<property name="attenceService" ref="attenceService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="attenceService" class="com.shketai.service.AttenceService">
+		<property name="attenceDao" ref="attenceDao"></property>
+		<property name="reasonsService" ref="reasonsService"></property>
+	</bean>
+	<bean id="attenceDao" class="com.shketai.dao.AttenceDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 教师-->
+	<bean id="teacherAction" class="com.shketai.action.TeacherAction" scope="prototype">
+		<property name="teacherService" ref="teacherService"></property>
+	</bean>
+	<bean id="teacherService" class="com.shketai.service.TeacherService">
+		<property name="teacherDao" ref="teacherDao"></property>
+	</bean>
+	<bean id="teacherDao" class="com.shketai.dao.TeacherDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 教师-->
+	<bean id="administratorAction" class="com.shketai.action.AdministratorAction" scope="prototype">
+		<property name="administratorService" ref="administratorService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="administratorService" class="com.shketai.service.AdministratorService">
+		<property name="administratorDao" ref="administratorDao"></property>
+	</bean>
+	<bean id="administratorDao" class="com.shketai.dao.AdministratorDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 教室-->
+	<bean id="classroomAction" class="com.shketai.action.ClassroomAction" scope="prototype">
+		<property name="classroomService" ref="classroomService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="classroomService" class="com.shketai.service.ClassroomService">
+		<property name="classroomDao" ref="classroomDao"></property>
+	</bean>
+	<bean id="classroomDao" class="com.shketai.dao.ClassroomDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 教室时间段-->
+	<bean id="classroominfoAction" class="com.shketai.action.ClassroominfoAction" scope="prototype">
+		<property name="classroominfoService" ref="classroominfoService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="classroominfoService" class="com.shketai.service.ClassroominfoService">
+		<property name="classroominfoDao" ref="classroominfoDao"></property>
+	</bean>
+	<bean id="classroominfoDao" class="com.shketai.dao.ClassroominfoDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		
+		<property name="classroomDao" ref="classroomDao"></property>
+	</bean>
+	
+	
+	<bean id="countAction" class="com.shketai.action.CountAction" scope="prototype">
+		<property name="countService" ref="countService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="countService" class="com.shketai.service.CountService">
+		<property name="countDao" ref="countDao"></property>
+	</bean>
+	<bean id="countDao" class="com.shketai.dao.CountDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="countsAction" class="com.shketai.action.CountsAction" scope="prototype">
+		<property name="countsService" ref="countsService"></property>
+	</bean>
+	<bean id="countsService" class="com.shketai.service.CountsService">
+		<property name="countsDao" ref="countsDao"></property>
+	</bean>
+	<bean id="countsDao" class="com.shketai.dao.CountsDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!--收支汇总 -->
+	<bean id="amountAction" class="com.shketai.action.AmountAction" scope="prototype">
+		<property name="amountService" ref="amountService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="amountService" class="com.shketai.service.AmountService">
+		<property name="amountDao" ref="amountDao"></property>
+	</bean>
+	<bean id="amountDao" class="com.shketai.dao.AmountDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 导出收支汇总 -->
+	<bean id="dwnloadAction" class="com.shketai.action.DownloadAction" scope="prototype">
+		<property name="amountService" ref="amountService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	
+	
+	<!-- 查询缴费明细 -->
+	<bean id="paymentAction" class="com.shketai.action.PaymentAction" scope="prototype">
+		<property name="paymentService" ref="paymentService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="paymentService" class="com.shketai.service.PaymentService">
+		<property name="paymentDao" ref="paymentDao"></property>
+	</bean>
+	<bean id="paymentDao" class="com.shketai.dao.PaymentDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+		<!-- 导出缴费明细 -->
+	<bean id="dwnload1Action" class="com.shketai.action.Download1Action" scope="prototype">
+		<property name="paymentService" ref="paymentService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<!-- 缴费明细分页 -->
+	<!-- <bean id="paymentAction" class="com.shketai.action.PaymentAction" scope="prototype">
+		<property name="paymentService" ref="paymentService"></property>
+	</bean> -->
+	
+	
+	<!-- 查询科目收支明细 -->
+	<bean id="subjectbalanceAction" class="com.shketai.action.SubjectbalanceAction" scope="prototype">
+		<property name="subjectbalanceService" ref="subjectbalanceService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="subjectbalanceService" class="com.shketai.service.SubjectbalanceService">
+		<property name="subjectbalanceDao" ref="subjectbalanceDao"></property>
+	</bean>
+	<bean id="subjectbalanceDao" class="com.shketai.dao.SubjectbalanceDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 导出科目收支明细 -->
+	<bean id="dwnload2Action" class="com.shketai.action.Download2Action" scope="prototype">
+		<property name="subjectbalanceService" ref="subjectbalanceService"></property>
+	</bean>
+	
+	<!-- 导出考勤-->
+	<bean id="download4Action" class="com.shketai.action.Download4Action" scope="prototype">
+		<property name="attenceService" ref="attenceService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	
+	<!-- 查询科目退款明细 -->
+	<bean id="subjectrefundAction" class="com.shketai.action.SubjectrefundAction" scope="prototype">
+		<property name="subjectrefundService" ref="subjectrefundService"></property>
+	</bean>
+	<bean id="subjectrefundService" class="com.shketai.service.SubjectrefundService">
+		<property name="subjectrefundDao" ref="subjectrefundDao"></property>
+	</bean>
+	<bean id="subjectrefundDao" class="com.shketai.dao.SubjectrefundDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+		<!-- 导出退款明细 -->
+	<bean id="dwnload3Action" class="com.shketai.action.Download3Action" scope="prototype">
+		<property name="subjectrefundService" ref="subjectrefundService"></property>
+	</bean>
+	
+		<!-- 按班级导出缴费明细 -->
+	<bean id="downMoneyAction" class="com.shketai.action.DownloadMoneyAction" scope="prototype">
+		<property name="paymentService" ref="paymentService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="downloadInfo" class="com.shketai.action.DownloadInfoAction" scope="prototype">
+		<property name="infoService" ref="infoService"></property>
+		<property name="headMasterService" ref="headMasterService"></property>
+	</bean>
+	
+	<bean id="downloadAllStudentInfoAction" class="com.shketai.action.DownloadAllStudentInfoAction" scope="prototype">
+		<property name="infoService" ref="infoService"></property>
+		<property name="headMasterService" ref="headMasterService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	
+	<!-- 导出日志 -->
+	<bean id="downloadLogsAction" class="com.shketai.action.DownloadLogsAction" scope="prototype">
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="majorsAction" class="com.shketai.action.MajorsAction" scope="prototype">
+		<property name="majorsService" ref="majorsService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="majorsService" class="com.shketai.service.MajorsService">
+		<property name="majorsDao" ref="majorsDao"></property>
+	</bean>
+	<bean id="majorsDao" class="com.shketai.dao.MajorsDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="reasonsAction" class="com.shketai.action.ReasonsAction" scope="prototype">
+		<property name="reasonsService" ref="reasonsService"></property>
+	</bean>
+	<bean id="reasonsService" class="com.shketai.service.ReasonsService">
+		<property name="reasonsDao" ref="reasonsDao"></property>
+	</bean>
+	<bean id="reasonsDao" class="com.shketai.dao.ReasonsDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 日志开始 -->
+	<bean id="logAction" class="com.shketai.action.LogAction">
+		<property name="logService" ref="logService"></property>
+	</bean>
+	
+	<bean id="logAspect" class="com.shketai.aspect.LogAspect">
+		<property name="logService" ref="logService"></property>
+		<property name="teacherService" ref="teacherService"></property>
+	</bean>
+	
+	<!-- <aop:config>
+		<aop:pointcut expression="execution(* com.shketai.dao.*.*(..))" id="pt"/>
+		<aop:aspect ref="logAspect">
+			在action的方法执行之后记录日志
+			<aop:after-returning method="writeLog" pointcut-ref="pt"/>
+		</aop:aspect>
+	</aop:config> -->
+	
+	<bean id="logService" class="com.shketai.service.LogService">
+		<property name="logDao" ref="logDao"></property>
+	</bean>
+	
+	<bean id="logDao" class="com.shketai.dao.LogDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<!-- 日志结束 -->
+	
+	<!-- 站内信 -->
+	<bean id="imessageAction" class="com.shketai.action.ImessageAction" scope="prototype">
+		<property name="imessageService" ref="imessageService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="imessageService" class="com.shketai.service.ImessageService">
+		<property name="imessageDao" ref="imessageDao"></property>
+		<property name="userDao" ref="userDao"></property>
+		<property name="noticeService" ref="noticeService"></property>
+		<property name="classinfoDao" ref="classinfoDao"></property>
+		<property name="studentDao" ref="studentDao"></property>
+	</bean>
+	<bean id="imessageDao" class="com.shketai.dao.ImessageDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 站内信 -->
+	<bean id="imessageByClassAction" class="com.shketai.action.ImessageByClassAction" scope="prototype">
+		<property name="imessageByClassService" ref="imessageByClassService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="imessageByClassService" class="com.shketai.service.ImessageByClassService">
+		<property name="imessageByClassDao" ref="imessageByClassDao"></property>
+	</bean>
+	<bean id="imessageByClassDao" class="com.shketai.dao.ImessageByClassDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 站内信（面试） -->
+	<bean id="imessageByInterAction" class="com.shketai.action.ImessageByInterAction" scope="prototype">
+		<property name="imessageByInterService" ref="imessageByInterService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="imessageByInterService" class="com.shketai.service.ImessageByInterService">
+		<property name="imessageByInterDao" ref="imessageByInterDao"></property>
+		<property name="interview_infoDao" ref="interview_infoDao"></property>
+	</bean>
+	<bean id="imessageByInterDao" class="com.shketai.dao.ImessageByInterDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	
+	<!-- 图片 -->
+	<bean id="pictureLibraryAction" class="com.shketai.action.PictureLibraryAction" scope="prototype">
+		<property name="pictureLibraryService" ref="pictureLibraryService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="pictureLibraryService" class="com.shketai.service.PictureLibraryService">
+		<property name="pictureLibraryDao" ref="pictureLibraryDao"></property>
+	</bean>
+	<bean id="pictureLibraryDao" class="com.shketai.dao.PictureLibraryDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	
+	<!-- 班主任 -->
+	<bean id="headMasterAction" class="com.shketai.action.HeadMasterAction" scope="prototype">
+		<property name="headMasterService" ref="headMasterService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="headMasterService" class="com.shketai.service.HeadMasterService">
+		<property name="headMasterDao" ref="headMasterDao"></property>
+		
+		<property name="classinfoDao" ref="classinfoDao"></property>
+	</bean>
+	<bean id="headMasterDao" class="com.shketai.dao.HeadMasterDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 学生导入excel -->
+	<bean id="downloadStudentAction" class="com.shketai.action.DownloadStudent" scope="prototype">
+		<property name="studentService" ref="studentService"></property>
+		<property name="infoService" ref="infoService"></property>
+		<property name="classinfoService" ref="classinfoService"></property>
+		<property name="headMasterService" ref="headMasterService"></property>
+		<property name="attenceService" ref="attenceService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	
+	<!-- 缴费明细  导入学生excel -->
+	<bean id="downloadStudentPaymentA" class="com.shketai.action.DownloadStudent" scope="prototype">
+		<property name="studentService" ref="studentService"></property>
+		<property name="infoService" ref="infoService"></property>
+		<property name="classinfoService" ref="classinfoService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	
+	
+	<!-- 通知 -->
+	<bean id="noticeAction" class="com.shketai.action.NoticeAction" scope="prototype">
+		<property name="noticeService" ref="noticeService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="noticeService" class="com.shketai.service.NoticeService">
+		<property name="noticeDao" ref="noticeDao"></property>
+	</bean>
+	<bean id="noticeDao" class="com.shketai.dao.NoticeDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	
+	<!-- 词典 -->
+	<bean id="dictionaryAction" class="com.shketai.action.DictionaryAction" scope="prototype">
+		<property name="dictionaryService" ref="dictionaryService"></property>
+		<property name="logService" ref="logService"></property>
+	</bean>
+	<bean id="dictionaryService" class="com.shketai.service.DictionaryService">
+		<property name="studentDao" ref="studentDao"></property>
+		<property name="dictionaryDao" ref="dictionaryDao"></property>
+	</bean>
+	<bean id="dictionaryDao" class="com.shketai.dao.DictionaryDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+</beans>
+	

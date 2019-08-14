@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="renderer" content="webkit">
+    <title>浦江镇青少年教育培训中心登录</title>
+    <link rel="stylesheet" href="./css/normalize.css">
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        .login {
+            width: 100%;
+            height: 100%;
+            background: url(img/beijing.png) no-repeat;
+        }
+
+        .login-center {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 20px;
+            width: 360px;
+            height: 379px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .login-center-login {
+            height: 36px;
+            margin-top: 39px;
+            margin-bottom: 29px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-center-login img {
+            width: 59px;
+            height: 2px;
+        }
+
+        .login-center-login span {
+            font-family: PingFangTC-Medium;
+            font-size: 18px;
+            margin: 27px;
+        }
+
+        .login-username,
+        .login-password {
+            background: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 278px;
+            height: 36px;
+            margin-bottom: 30px;
+            margin-left: 40px; /*新增*/
+        }
+
+
+        /* 输入框 */
+
+        .login-input,
+        .login-mima {
+            width: 245px;
+            height: 34px;
+            padding-left: 31px;
+        }
+
+        /* 定位输入框前面的小图标 */
+
+        .login-username,
+        .login-password,
+        .login-yzm-input {
+            position: relative;
+        }
+
+        /* 具体定位 */
+
+        .login-username-icon,
+        .login-password-icon,
+        .login-yzm-icon {
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            top: 10px;
+            left: 7px;
+        }
+
+        /* 图标 */
+
+        .login-username-icon {
+            background: url(img/username.png) no-repeat;
+        }
+
+        .login-password-icon {
+            background: url(img/mima1.png) no-repeat;
+        }
+
+
+
+
+        /* 登录按钮 */
+
+        .login-btn {
+            background: #65daf7;
+            border-radius: 100px;
+            width: 280px;
+            height: 36px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .login-btn:hover{
+            background: #75c2f6;
+            color: #fff;
+        }
+        /* 注册文字 */
+        .login-zhuce {
+            font-size: 14px;
+            color: #18578a;
+            margin-top: 10px;
+            display: inline-block
+        }
+        .findpwd{
+            color: #18578a;
+            margin-left: 20px;
+        }
+      a:hover{text-decoration:underline;}
+    </style>
+</head>
+
+<body>
+    <!-- 登录页 -->
+    <div class="login">
+        <!-- 登录布局开始 -->
+        <div class="login-center">
+            <!-- 上面登录二字 -->
+            <form name="loginform" method="post" id="loginform">
+                <div class="login-center-login">
+                    <img src="./img/login-left.png" alt="">
+                    <span>登录</span>
+                    <img src="./img/login-right.png" alt="">
+                </div>
+                <!-- 用户名 -->
+                <div class="login-username">
+                    <i class="login-username-icon"></i>
+                    <input id="mobilephone" type="tel" placeholder="请输入手机号码" name="username" class="login-input">
+                </div>
+                <!-- 密码 -->
+                <div class="login-password">
+                    <i class="login-password-icon"></i>
+                    <input id="password" type="password" placeholder="请输入密码" name="password" class="login-mima">
+                </div>
+                <div class="login-submit">
+                    <input type="button" value="登录" class="login-btn" id="submit" onclick="checkForm()">
+                </div>
+                <!-- 注册 -->
+                <a href="reg.html" class="login-zhuce" target="_blank">没有账号?立即注册</a>
+                <a href="resetpwd.html" class="findpwd" target="_blank">忘记密码</a>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/jquery.cookie.js"></script>
+<script src="./js/layer/layer.js"></script>
+<script>
+
+    if($.cookie('users_id')){
+        window.location.href = "student.html";
+    }
+
+    function checkForm() {
+        var mobilephone = $("#mobilephone").val();
+        var password = $("#password").val();
+        if (mobilephone == "" || password == "") {
+            layer.msg('用户名或密码不能为空！')
+            return false;
+        } else {
+            $.post('pjsys/login.action',{mobilephone:mobilephone,password:password},function (msg) {
+                if (msg!=0) {
+                    layer.msg('登陆成功！',{time:1000},function () {
+                        $.cookie('users_id',msg,{ expires: 7 });
+                        $.cookie('users_tel',mobilephone,{ expires: 7 });
+                        window.location.href = "student.html";
+                    })
+                } else {
+                    layer.msg('用户名或密码错误！')
+                    $("#username").val("");
+                    $("#password").val("");
+                }
+            },'json')
+            return false;
+        }
+    }
+    
+</script>
+
+</html>

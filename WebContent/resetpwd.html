@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="renderer" content="webkit">
+    <title>忘记密码</title>
+<link rel="shortcut icon" href="./img/bitbug_favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="./css/normalize.css">
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        .login {
+            width: 100%;
+            height: 100%;
+            background: url(img/beijing.png) no-repeat;
+        }
+
+        .login-center {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 20px;
+            width: 380px;
+            height: 420px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .login-center-login {
+            height: 36px;
+            margin-top: 39px;
+            margin-bottom: 29px;
+
+        }
+
+        .login-center-login span {
+            font-size: 18px;
+        }
+
+        form input {
+            border: 1px solid #ddd;
+            width: 190px;
+            height: 34px;
+        }
+
+        label {
+            height: 34px;
+            width: 120px;
+            display: inline-block;
+            text-align: left;
+        }
+        form div{
+            margin: 15px 0;
+        }
+        #yzm {
+            width: 132px;
+            height: 40px;
+        }
+
+        .submit {
+            background: #65daf7;
+            border-radius: 100px;
+            width: 135px;
+            height: 40px;
+            margin-left: 30px;
+            margin-top: 25px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .submit:hover {
+            background: #75c2f6;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body bgcolor="#f8f9fc">
+    <!-- 注册 -->
+    <div class="login">
+        <div class="login-center">
+            <div class="login-center-login">
+                <span>重置密码</span>
+            </div>
+            <form name="zhuce" method="POST" id="zhuce">
+                <div>
+                <label for="mobilephone">手机号(用户名):</label>
+                <input type="tel" name="mobilephone" placeholder="请输入手机号" id="mobilephone">
+                </div>
+                
+                <div>
+                <label for="password">重置密码:</label>
+                <input type="password" name="fristpassword" placeholder="请输入密码" id="password">
+                </div>
+
+                <div>
+                <label for="passwords">确认密码:</label>
+                <input type="password" name="lastpassword" placeholder="请确认密码" id="passwords">
+                </div>
+
+                <div>
+                <label for="code">验证码:</label>
+                <input type="text" id="code" placeholder="请输验证码" style="width: 85px;">
+                <input type="button" class="btn" onclick="getCode(this)" id="J_getCode" value="获取验证码" style="width: 100px;">
+                </div>
+
+                <input type="button" value="立即重置" class="submit">
+            </form>
+        </div>
+    </div>
+</body>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/layer/layer.js"></script>
+<script>
+    /*获取验证码*/
+    var isPhone = 1;
+    function getCode(e) {
+        checkPhone(); //验证手机号码
+        if (isPhone) {
+            resetCode(); //倒计时
+        } else {
+            $('#mobilephone').focus();
+        }
+
+    }
+    //验证手机号码
+    function checkPhone() {
+        var phone = $('#mobilephone').val();
+        var pattern = /^1[0-9]{10}$/;
+        isPhone = 1;
+        if (phone == '') {
+            layer.msg('请输入手机号码');
+            isPhone = 0;
+            return;
+        }
+        if (!pattern.test(phone)) {
+            layer.msg('请输入正确的手机号码');
+            isPhone = 0;
+            return;
+        }
+        $.post('pjsys/sendYzm.action',{mobilephone:phone},function (data) {
+            if(data===1){
+                layer.msg('发送验证码成功')
+            }else {
+                layer.msg('发送验证码失败')
+            }
+        })
+        
+    }
+    //倒计时
+    function resetCode() {
+        var second = 60;
+        var timer = null;
+        timer = setInterval(function () {
+            second -= 1;
+            if (second > 0 ) {
+                $('#J_getCode').attr('disabled', true)
+                $('#J_getCode').val(second + '秒之后获取');
+            }
+            else {
+                clearInterval(timer);
+                $('#J_getCode').attr('disabled', false)
+                $('#J_getCode').val('重新获取验证码')
+            }
+        }, 1000);
+    }
+
+
+    // 注册验证
+
+    $('.submit').click(function () {
+
+        checkForm()
+
+
+
+
+    })
+
+
+    function checkForm() {
+        var password = $('#password').val();
+        var passwords = $('#passwords').val();
+        var mobilephone = $('#mobilephone').val();
+        var yzm = $('#code').val();
+
+        if (mobilephone == '') {
+            layer.msg("手机号不能为空")
+            return false;
+        }
+        if(!(/^1[0-9]{10}$/.test(mobilephone))){
+            layer.msg("手机号码格式错误")
+            return false;
+        }
+        if (password == '') {
+            layer.msg("密码不能为空")
+            return false;
+        }
+        if (password === passwords) {} else {
+            layer.msg("两次密码不一致")
+            return false;
+        }
+
+        if (yzm == '') {
+            layer.msg("验证码不能为空")
+            return false;
+        }
+
+        $.post('pjsys/reset.action',{mobilephone:mobilephone,password:password,yzm:yzm},function (data) {
+            if(data===1){
+                layer.msg('修改成功',{time:1000},function () {
+                    window.location.href='index.html'
+                })
+            }
+            if(data===2){
+                layer.msg('验证码不正确')
+            }
+
+            if(data===0){
+                layer.msg('修改失败')
+            }
+            if( data ===3){
+              layer.msg('此账号未注册')
+            }
+        })
+        
+
+    }
+</script>
+
+</html>

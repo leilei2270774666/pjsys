@@ -1,0 +1,1916 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>
+
+<constant name="struts.multipart.maxSize" value="85000000"/><!-- 可上传80M的文件 -->
+
+<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+ <!-- 开启开发者模式 -->
+	<constant name="struts.devMode" value="true"></constant>
+	<constant name="struts.ui.theme" value="simple"></constant>
+	<constant name="struts.custom.i18n.resources" value="messageResource"></constant>
+	<package name="default" namespace="/" extends="json-default">
+
+		
+	<!-- 家长登录 
+	访问地址：http://localhost:8080/pjsys/login.action?username=zhangsan&password=12345
+	所需参数：username  
+	       password
+	-->
+	<!-- <action name="login" class="userAction">
+			<result name="success" type="redirect">  
+			 /student.html
+			</result>
+			<result name="fail" type="redirect">  
+			 /index.html
+			</result>
+	</action> -->
+	
+	<!-- <action name="login" class="userAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action> -->
+	
+	<action name="login" class="userAction">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 确认报名须知
+	http://localhost:8080/pjsys/updateResult.action?id=1
+	所需参数：id  家长id
+	 -->
+	<action name="updateResult" class="userAction" method="updateResult">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 发验证码
+	http://localhost:8080/pjsys/sendYzm.action?mobilephone=?
+	 -->
+	<action name="sendYzm" class="userAction" method="sendMsg">
+			<result type="json">
+				<param name="root">result</param> 
+			</result>
+	</action>
+		
+		
+	<!-- 家长注册 
+	访问地址：http://ip:8080/pjsys/register.action?mobilephone=13621893178&password=12345&yzm=1234
+	所需参数	  mobilephone 手机号
+		  password    密码
+		  yzm         验证码
+		 
+	-->
+	<action name="register" class="userAction" method="register">
+			<result type="json">
+				<param name="root">result</param> 
+			</result>
+	</action>
+		
+			
+	<!-- 家长重置密码
+	访问地址：http://ip:8080:pjsys/reset.action?mobilephone=13621893178&password=23456&yzm=1234
+	所需参数	  mobilephone 手机号
+		  password    密码
+		  yzm         验证码
+		 
+	-->
+		<action name="reset" class="userAction" method="reset">
+			<result type="json">
+				<param name="root">result</param> 
+			</result>
+	</action>
+		<!-- 新增学生信息 
+		访问地址：http://localhost:8080:pjsys/add.action?user_id=3&stuName=xiaoming&sex=1&personalNum=320623199404290834
+	       &schoolname=杨浦一中&Address=111&postcode=226413&parent=晓红&mobilephone=13621893178&EmergencyContactName=zhangsan&EmergencyContactPhone=13621893178&workaddress=111
+		所需参数：user_id   家长id
+			   stuName   学生姓名
+			   sex       性别
+			   personalNum  身份证
+			   schoolname   在读学校
+			   Address     家庭住址
+			   parent      家长姓名
+			   mobilephone  手机号
+			   emergencyContactName  备用联系人
+			   EmergencyContactPhone 备用手机号
+			   workaddress     工作单位
+		-->
+	<action name="add" class="studentAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+			<!-- <result name="input">
+				/test.jsp
+			</result> -->
+	</action>
+	
+	<!-- 修改学生信息 
+		访问地址：http://localhost:8080:pjsys/update.action?user_id=36&id=3&stuName=xiaoming&sex=1&personalNum=320623199404290834
+	       &schoolname=杨浦一中&address=111&postcode=226413&parent=晓红&mobilephone=13621893178&emergencyContactName=zhangsan&emergencyContactPhone=13621893178&workaddress=111
+		所需参数：user_id   家长id
+				id        学生id
+			   stuName   学生姓名
+			   sex       性别
+			   personalNum  身份证
+			   schoolname   在读学校
+			   address     家庭住址
+			   postcode    邮编
+			   parent      家长姓名
+			   mobilephone  手机号
+			   emergencyContactName  备用联系人
+			   emergencyContactPhone 备用手机号
+			   workaddress     工作单位
+		-->
+		<action name="update" class="studentAction" method="update">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 删除学生
+	访问地址：http://localhost:8080:pjsys/delete.action?id=9
+	 -->
+	<action name="delete" class="studentAction" method="delete">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 查询学科
+		http://47.100.31.2/pjsys/findAllMajors.action?
+		-->
+		<action name="findAllMajors" class="majorsAction" method="findAll">
+			<result type="json">
+				<param name="root">majors</param>
+			</result>
+	</action>
+	
+		<!-- 查询科目 
+		http://47.100.31.2/pjsys/findAllSubject.action?
+		-->
+		<action name="findAllSubject" class="subjectAction" method="findAll">
+			<result type="json">
+				<param name="root">subjects</param>
+			</result>
+	</action>
+	
+	<!-- 按专业查询科目 
+		http://47.100.31.2/pjsys/findAllSubjects.action?major_id=1
+		-->
+		<action name="findAllSubjects" class="subjectAction" method="findAll1"> 
+			<result type="json">
+				<param name="root">subjects</param>
+			</result>
+	</action>
+		
+		<!-- 查询符合年龄的班级
+		访问地址：http://ip:8080:pjsys/findBySubjectAndAge.action?major_id=4&stu_id=46&page=1
+		所需参数：major_id   专业id
+				stu_id    学生id
+				page      页码
+		-->
+	<action name="findBySubjectAndAge" class="classinfoAction" method="findBySubjectAndAge">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+		
+		<!-- 根据科目查询符合年龄的班级
+		访问地址：http://ip:8080:pjsys/findBySubjectAndAges.action?subject_id=4&stu_id=46
+		所需参数：subject_id 科目id
+				stu_id    学生id
+		-->
+		<action name="findBySubjectAndAges" class="classinfoAction" method="findBySubjectAndAges">
+			<result type="json">
+				<param name="root">classinfo1</param>
+			</result>
+	</action>
+			<!-- 选课
+			访问地址：http://localhost:8080:pjsys/selectSubject.action?stu_id=51&classinfo_id=3
+			所需参数：stu_id     学生id
+				   classinfo_id	班级id
+			-->
+	<action name="selectSubject" class="classinfoAction" method="selectSubject">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 删除选课
+			访问地址：http://ip:8080:pjsys/deleteById.action?id=?
+			所需参数：id   选课记录的id	
+			-->
+	<action name="deleteById" class="infoAction" method="deleteById">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+			<!--退班
+			访问地址：http://ip:8080:pjsys/quitSubject.action?id=215
+			所需参数：id   选课记录id
+			-->
+	<action name="quitSubject" class="infoAction" method="quitSubject">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+		
+		<!-- 查询面试科目
+		http://localhost:8080:pjsys/findAllInterview.action?
+		 -->
+		<action name="findAllInterview" class="interviewAction" method="findAllInterview">
+			<result type="json">
+				<param name="root">interviews</param>
+			</result>
+	</action>
+		
+			<!--查询相关的面试时间段
+			访问地址：http://localhost:8080:pjsys/findBySubjectInterview.action?interview_id=1
+			所需参数：interview_id  面试科目id
+			-->
+	<action name="findBySubjectInterview" class="interview_timeslotAction" method="findBySubjectInterview">
+			<result type="json">
+				<param name="root">interview_timeslot1</param>
+			</result>
+	</action>
+	
+		<!--查询所有面试时间段
+			访问地址：http://localhost:8080:pjsys/findAlltimeslot.action?
+			-->
+	<action name="findAlltimeslot" class="interview_timeslotAction" method="findAll">
+			<result type="json">
+				<param name="root">interview_timeslot1</param>
+			</result>
+	</action>
+	
+			<!--预约面试
+			访问地址：http://ip:8080:pisys/selectInterview.action?stu_id=8&interview_timeslot_id=1
+			所需参数：stu_id  学生id
+				interview_timeslot_id  面试场次id
+			-->
+	<action name="selectInterview" class="interview_timeslotAction" method="selectInterview">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	<!--查看已经预约面试列表
+			访问地址：http://ip:8080:pisys/findInterviewList.action?user_id=36
+			所需参数：user_id  家长id
+			--> 
+	<action name="findInterviewList" class="interview_infoAction" method="findInterviewList">
+			<result type="json">
+				<param name="root">interview_info</param>
+			</result>
+	</action>
+	
+	<!-- 
+		查询指定interview_id的面试科目记录
+		访问地址：127.0.0.1:8080/pjsys/queryInterviewtimeslotActionByinterviewid?interview_id=?
+		传递参数 ： interview_id   面试科目id
+	 -->
+	<action name="queryInterviewtimeslotActionByinterviewid" class="interview_timeslotAction" method="queryInterviewtimeslotActionByinterviewid">
+			<result type="json">
+				<param name="root">interview_timeslot1</param>
+			</result>
+	</action>
+	
+	<!--查看我的课程
+			访问地址：http://ip:8080:pisys/findClassinfo.action?user_id=2
+			所需参数：user_id
+			-->
+	<action name="findClassinfo" class="infoAction" method="findClassinfo">
+			<result type="json">
+				<param name="root">info</param>
+			</result>
+	</action>
+	
+	<!--缴费状态
+		访问地址：http://localhost:8080/pjsys/pay.action?ids=208,209&flag=2
+			所需参数： ids    选课记录编号
+				   flag   缴费状态
+		-->
+	<action name="pay" class="infoAction" method="pay">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	
+	<!--缴费状态
+		访问地址：http://localhost:8080/pjsys/payDeleteIds?ids=208,209
+			所需参数： ids    选课记录编号
+				   flag   缴费状态
+		-->
+	<action name="payDeleteIds" class="infoAction" method="payDeleteIds">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	
+	
+	<!-- 缴费时查询学生所选班级信息
+	47.100.31.2/pjsys/findAllInfo.action?user_id=36
+	所需参数：user_id家长ID
+	 -->
+	<action name="findAllInfo" class="infoAction" method="findAllInfo">
+			<result type="json">
+				<param name="root">info</param>
+			</result>
+	</action>
+	
+	<!-- 退费时查询学生所选班级信息
+	47.100.31.2/pjsys/findAllInfo1.action?user_id=2
+	所需参数：user_id家长ID
+	 -->
+	<action name="findAllInfo1" class="infoAction" method="findAllInfo1">
+			<result type="json">
+				<param name="root">info</param>
+			</result>
+	</action>
+	
+	<!-- 续费时查询学生所选班级信息
+	47.100.31.2/pjsys/findAllInfo2.action?user_id=2
+	所需参数：user_id家长ID
+	 -->
+	<action name="findAllInfo2" class="infoAction" method="findAllInfo2">
+			<result type="json">
+				<param name="root">info</param>
+			</result>
+	</action>
+	
+	<!-- 教师端缴费审核时查询学生所选班级信息列表
+	47.100.31.2/pjsys/findAllInfo4.action?page=1
+	所需参数：page  页码
+	 -->
+	<action name="findAllInfo4" class="infoAction" method="findAllInfo4">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 教师端xu费审核时查询学生所选班级信息列表page=1
+	47.100.31.2/pjsys/findAllInfo5.action?page=1
+	所需参数：page 页码 
+	 -->
+	<action name="findAllInfo5" class="infoAction" method="findAllInfo5">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	<!-- 教师端退费时费审核时查询学生所选班级信息列表
+	47.100.31.2/pjsys/findAllInfo6.action?page=1
+	所需参数：page 页码 
+	 -->
+	<action name="findAllInfo6" class="infoAction" method="findAllInfo6">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	<!--退班时查询学生所选班级信息
+	47.100.31.2/pjsys/findAllInfo3.action?user_id=2
+	所需参数：user_id家长ID
+	 -->
+	<action name="findAllInfo3" class="infoAction" method="findAllInfo3">
+			<result type="json">
+				<param name="root">info</param>
+			</result>
+	</action>
+	
+		<!--家长查看个人信息
+		访问地址：http://ip:8080:TeachingSystem/findById.action?user_id=1
+			所需参数：user_id 家长编号
+		-->
+	<action name="findById" class="studentAction" method="findById">
+			<result type="json">
+				<param name="root">student1</param>
+			</result>
+	</action>
+	
+	<!--
+		访问地址：http://ip:8080:pjsys/findById1.action?id=4
+			所需参数：id 学生id
+		-->
+	<action name="findById1" class="studentAction" method="findById1">
+			<result type="json">
+				<param name="root">student1</param>
+			</result>
+	</action>
+		<!--查看个人考勤
+		访问地址：http://ip:8080:pjsys/findAttenceById.action?user_id=2
+			所需参数：user_id  家长编号
+		-->
+	<action name="findAttenceById" class="attenceAction" method="findAttenceById">
+			<result type="json">
+				<param name="root">att1</param>
+			</result>
+	</action>
+	
+		<!-- 学生端查看缺勤
+		访问地址：http://localhost:8080:pjsys/UnAttence.action?user_id=909
+			所需参数：user_id  家长编号
+		-->
+	<action name="UnAttence" class="attenceAction" method="UnAttence">
+			<result type="json">
+				<param name="root">att</param>
+			</result>
+	</action>
+	
+	
+	<!-- 根据姓名查询考勤
+		访问地址：http://localhost:8080:pjsys/showAttence.action?stuName=？
+			所需参数：stuName 学生姓名
+		-->
+	<action name="showAttence" class="attenceAction" method="show1">
+			<result type="json">
+				<param name="root">att</param>
+			</result>
+	</action>
+	
+	<!-- 修改考勤
+	访问地址：http://localhost:8080/pjsys/updateAttence.action?id=279
+	所需参数：id  考勤记录id
+	-->
+	<action name="updateAttence" class="attenceAction" method="updateFlag">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action> 
+	
+	<!-- 修改考勤
+	访问地址：http://localhost:8080/pjsys/attenceUpdateStatu.action?id=279&attence_status=2&reason_id=1
+	所需参数：id  考勤记录id
+		attence_status 考情状态
+		reason_id 缺勤原因
+	-->
+	<action name="attenceUpdateStatu" class="attenceAction" method="attenceUpdateStatu">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action> 
+	
+	<!-- 教师登录
+	访问地址：http://localhost:8080/pjsys/teacherlogin.action?username=zhangsan&password=12345&role=1
+	所需参数：username 用户名
+		   password 密码
+			role    角色
+	 -->
+	<action name="teacherlogin" class="teacherAction">
+			<result type="json">
+				<param name="root">teacher</param>
+				<param name="excludeProperties">password</param>
+			</result>
+	</action>
+	
+	<!-- 新增面试科目
+	访问地址：http://localhost:8080/pjsys/addInterviewSubject.action?interviewSubject=meishu
+	所需参数：interviewSubject
+	 -->
+	<action name="addInterviewSubject" class="interviewAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 修改面试科目
+	访问地址：http://localhost:8080/pjsys/updateInterviewSubject.action?id=2&interviewSubject=yinyue
+	 -->
+	<action name="updateInterviewSubject" class="interviewAction" method="update">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 新增面试时间段
+	访问地址：http://47.100.31.2/pjsys/addInterview_timeslot.action?interview_id=1&starttime=2018-04-28T14:00:00&end_time=2018-04-28T15:00:00&num=50
+	所需参数：interview_id   面试科目id
+				starttime     开始时间
+				end_time       结束时间
+				num            人数
+	 -->
+
+	<action name="addInterview_timeslot" class="interview_timeslotAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 新增学科
+	访问地址：http://localhost:8080/pjsys/addMajors.action?major=meishu
+	所需参数：major  学科名称 
+		  
+	 -->
+	<action name="addMajors" class="majorsAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 修改学科
+	访问地址：http://localhost:8080/pjsys/updateMajors.action?id=2&major=meishu
+	所需参数：id   专业id
+	       major  学科名称 
+	 -->
+	<action name="updateMajors" class="majorsAction" method="update">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 删除学科 
+	访问地址：http://localhost:8080/pjsys/deleteMajors.action?id=2
+	所需参数：id   学科id
+	-->
+	<action name="deleteMajors" class="majorsAction" method="delete">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 新增科目
+	访问地址：http://localhost:8080/pjsys/addSubject.action?subject=meishu&interview=1&major_id=1&introduction=aaa
+	所需参数：subject  科目名称 
+		  interview 是否需要面试
+		  introduction 介绍
+		  major_id  专业id
+	 -->
+	<action name="addSubject" class="subjectAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 修改科目
+	访问地址：http://localhost:8080/pjsys/updateSubject.action?id=2&subject=meishu&interview=1&major_id=1&introduction=aaa
+	所需参数：id   科目id
+	       subject  科目名称
+	       interview 是否需要面试
+		  introduction 介绍
+		  major_id  专业id
+	 -->
+	<action name="updateSubject" class="subjectAction" method="update">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 删除科目 
+	访问地址：http://localhost:8080/pjsys/deleteSubject.action?id=2
+	所需参数：id   科目id
+	-->
+	<action name="deleteSubject" class="subjectAction" method="delete">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 新增班级
+	访问地址：http://localhost:8080/pjsys/addClassinfo.action?classname=401&keshi=10&unit_price=70&money=700
+	&min_age=2008-04-23&num=50&subject_id=5
+	所需参数：classname   班级名称
+		   keshi      课时
+		   unit_price 报名费
+		   money      总课时费
+		   min_age    年龄下限
+		   num         额定人数
+		   subject_id 科目id
+	 -->
+	<action name="addClassinfo" class="classinfoAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	<!-- 修改班级
+	访问地址：http://localhost:8080/pjsys/updateClassinfo.action?id=3&classname=301&keshi=10&unit_price=70&money=700
+	&min_age=2008-04-23&num=50
+	所需参数： id           班级id
+			classname   班级名称
+		   keshi      课时
+		   unit_price 报名费
+		   money      总课时费
+		   min_age    最小年龄
+		   num      人数
+	 -->
+	<action name="updateClassinfo" class="classinfoAction" method="update">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 删除班级
+	访问地址：http://localhost:8080/pjsys/deleteClassinfo.action?id=3
+	所需参数：id   班级id
+	-->
+	<action name="deleteClassinfo" class="classinfoAction" method="delete">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 查看未分配教室的班级
+	      没有教室的班级
+		访问地址：http://localhost:8080/pjsys/classinfoInclassroominfo_idIsNull
+	-->
+	<action name="classinfoInclassroominfo_idIsNull" class="classinfoAction" method="classinfoInclassroominfo_idIsNull">
+			<result type="json">
+				<param name="root">classinfo1</param>
+			</result>
+	</action>
+	
+	<!-- 新增教室
+	访问地址：http://47.100.31.2/pjsys/addClassroom.action?name=教室二
+	所需参数：name 教室名
+	 -->
+	<action name="addClassroom" class="classroomAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	
+	<!-- 新增教室时间段
+	访问地址：http://47.100.31.2/pjsys/addClassroominfo.action?classroom_id=?&start=13:00&jieshu=14:00 &day=1
+	所需参数：classroom_id  教室id
+			start       开始时间
+			jieshu      结束时间
+			day         周几
+	 -->
+	<action name="addClassroominfo" class="classroominfoAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 面试审核通过 
+	访问地址：http://localhost:8080/pjsys/pass.action?stu_id=1&interview_timeslot_id=1
+	所需参数：stu_id  学生id
+	interview_timeslot_id 面试场次id
+	-->
+	<action name="pass" class="interview_infoAction" method="pass">
+			<result type="json">
+				<param name="root">results</param>
+			</result>
+	</action>
+	
+	<!-- 面试审核不通过
+	访问地址：http://localhost:8080/pjsys/unpass.action?stu_id=2&interview_timeslot_id=1
+	所需参数：stu_id  学生id
+	interview_timeslot_id 面试场次id
+	 -->
+	<action name="unpass" class="interview_infoAction" method="unpass">
+			<result type="json">
+				<param name="root">results</param>
+			</result>
+	</action>
+	
+	<!-- 查看班级列表
+	访问地址：http://localhost:8080/pjsys/findAllClassinfo.action?page=?
+	所需参数：page  页码
+	 -->
+	<action name="findAllClassinfo" class="classinfoAction" method="findAll">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 查看所有班级
+	访问地址：http://localhost:8080/pjsys/findAllClassinfos.action?
+	 -->
+	<action name="findAllClassinfos" class="classinfoAction" method="findAll1">
+			<result type="json">
+				<param name="root">classinfo1</param>
+			</result>
+	</action>
+	
+	<!--  访问地址：http://localhost:8080/pjsys/findAll1.action?-->
+	<action name="findAll1" class="classinfoAction" method="findAll1">
+			<result type="json">
+				<param name="root">classinfo1</param>
+			</result>
+	</action>
+	
+	<!-- 查看教室列表
+	访问地址：http://localhost:8080/pjsys/findAllClassroom.action?
+	 -->
+	<action name="findAllClassroom" class="classroomAction" method="findAll">
+			<result type="json">
+				<param name="root">classRoom</param>
+			</result> 
+	</action>
+	
+	<!-- 查看教室时间段
+	访问地址：http://localhost:8080/pjsys/findAllClassroominfo.action?classroom_id=1
+	所需参数：classroom_id  教室id
+	 -->
+	<action name="findAllClassroominfo" class="classroominfoAction" method="findAll1">
+			<result type="json">
+				<param name="root">classroominfos</param>
+			</result>
+	</action>
+	<!-- 教室排班 
+	访问地址：http://localhost:8080/pjsys/selectClassroom.action?id=1&classroominfo.id=1
+	所需参数： id     班级id
+		  classroominfo.id  教室时间段id
+	-->
+	<action name="selectClassroom" class="classinfoAction" method="selectClassroom">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 教师端查询所有学生 
+	访问地址：http://localhost:8080/pjsys/findAllstudent.action?page=1
+	所需参数：page  页码
+	-->
+	<action name="findAllstudent" class="studentAction" method="find">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	 <!-- 教师端查询所有学生  倒序
+	访问地址：http://localhost:8080/pjsys/finddesc.action?page=1
+	-->
+	<action name="finddesc" class="studentAction" method="finddesc">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	<!-- 教师端根据姓名查询学生 
+	访问地址：http://localhost:8080/pjsys/show.action?stuName=？
+	所需参数：stuName  学生姓名
+	-->
+	<action name="show" class="studentAction" method="show">
+			<result type="json">
+				<param name="root">student1</param>
+			</result>
+	</action>
+	
+	<!-- 教务数据汇总 
+	localhost:8080/pjsys/findAll.action?
+	-->
+	<action name="findAll" class="countAction" method="findAll">
+			<result type="json">
+				<param name="root">counts</param>
+			</result>
+	</action>
+	
+	<!-- 
+	    男女比例： localhost:8080/pjsys/countpercent.action?
+	 -->
+	<action name="countpercent" class="countAction" method="countpercent">
+			<result type="json">
+				<param name="root">count</param>
+			</result>
+	</action>
+	
+	<!-- 教师端查看学生已选课信息
+	http://47.100.31.2/pjsys/findInfoById.action?stu_id=2
+	所需参数：stu_id  学生id
+	 -->
+	<action name="findInfoById" class="infosAction" method="findById">
+			<result type="json">
+				<param name="root">info</param> 
+			</result>
+	</action>
+	
+	<!-- 教师端查看学生面试状态
+	http://47.100.31.2/pjsys/findInterview.action?stu_id=2
+	所需参数：stu_id  学生id
+	 -->
+	<action name="findInterview" class="interview_infoAction" method="findInterview">
+			<result type="json">
+				<param name="root">interview_info</param>
+			</result>
+	</action>
+	
+	<!-- 教师端修改面试时间段
+	http://47.100.31.2/pjsys/updateInterview_timeslot.action?id=?&starttime=2018-04-28T14:00:00&end_time=2018-04-28T15:00:00&num=50
+	所需参数：id  = Interview_timeslot对象里的 id
+	 -->
+	<action name="updateInterview_timeslot" class="interview_timeslotAction" method="update">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 教师端考勤管理 
+	http://47.100.31.2/pjsys/attence.action?stu_id=1,8&attence_status=1&classinfo_id=1&reason_id=1
+	所需参数：	stu_id          学生id
+			classinfo_id    班级id
+		   attence_status  考勤状态
+		   reason_ids       缺勤原因id
+	-->
+	<action name="attence" class="attenceAction" method="attence">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 教师端考勤里的正常人数 
+	http://47.100.31.2/pjsys/CountAttences.action?classinfo_id=1
+	所需参数：	
+			classinfo_id    班级id
+	-->
+	<action name="CountAttences" class="attenceAction" method="CountAttences">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 教师端考勤管里的缺勤人数
+	http://47.100.31.2/pjsys/CountUnAttence.action?classinfo_id=1
+	所需参数：	
+			classinfo_id    班级id
+	-->
+	<action name="CountUnAttence" class="attenceAction" method="CountUnAttence">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 教师端查看所有缺勤原因
+	http://47.100.31.2/pjsys/findAllReasons.action?
+	 -->
+	<action name="findAllReasons" class="reasonsAction" method="findAll">
+			<result type="json">
+				<param name="root">reason</param>
+			</result>
+	</action>
+	
+	<!--显示出已选这门课的学生列表
+	http://47.100.31.2/pjsys/findByClassinfoId.action?classinfo_id=1&page=1
+	所需参数：	classinfo_id     班级id
+		   page  页码
+	-->
+	<action name="findByClassinfoId" class="infoAction" method="find">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!--显示出已选这门课的学生列表(倒序)
+	http://47.100.31.2/pjsys/findByDesc.action?classinfo_id=1&page=1
+	所需参数：	classinfo_id     班级id
+		   page  页码
+	-->
+	<action name="findByDesc" class="infoAction" method="findByDesc">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!--显示出已选这门课的未考勤的学生列表
+	http://47.100.31.2/pjsys/findByclassId1.action?classinfo_id=1&page=1
+	所需参数：	classinfo_id     班级id
+		   page  页码
+	-->
+	<action name="findByclassId1" class="infoAction" method="findByclassId1">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 向班级里添加学生
+	http://47.100.31.2/pjsys/addInfo.action?classinfo_id=3&stu_id=51
+	所需参数：	classinfo_id          班级id
+		   stu_id  学生id
+	-->
+	<action name="addInfo" class="inforAction" method="addInfo">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	<!-- 教师端根据姓名查询班级 
+	访问地址：http://localhost:8080/pjsys/showclassinfo.action?classname=？
+	所需参数：classname  班级名
+	-->
+	<action name="showclassinfo" class="classinfoAction" method="show">
+			<result type="json">
+				<param name="root">classinfo1</param>
+			</result>
+	</action>
+	
+	<!-- 教师端根据id查询班级 
+	访问地址：http://localhost:8080/pjsys/showclassinfoId.action?id=？
+	所需参数：classname  班级名
+	-->
+	<action name="showclassinfoId" class="classinfoAction" method="showbj">
+			<result type="json">
+				<param name="root">classinfo1</param>
+			</result>
+	</action>
+	
+	<!--查出该班级下的学生(为了导出功能)
+	http://47.100.31.2/pjsys/findAllByclassId.action?classinfo_id=1
+	所需参数：	classinfo_id     班级id
+		   page  页码
+	-->
+	<!--  --><action name="findAllByclassId" class="infoAction" method="findAllByclassId">
+			<result type="json">
+				<param name="root">info</param>
+			</result>
+	</action>
+	
+	
+	<!-- 计算总收入金额 
+	访问地址：localhost:8080/pjsys/findAllMoney.action?
+	-->
+	<action name="findAllMoney" class="amountAction" method="findAllMoney">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	<!-- 计算总退款金额
+		访问地址：localhost:8080/pjsys/findAllBackmoney.action?
+	 -->
+	<action name="findAllBackmoney" class="amountAction" method="findAllBackmoney">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+		<!-- 查询缴费明细
+				访问地址：localhost:8080/pjsys/getPayment.action?
+		 -->
+		<action name="getPayment" class="paymentAction" method="getPayment">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	<!-- 查询科目收支明细
+	访问地址：localhost:8080/pjsys/getSubjectbalance.action?
+	 -->
+		<action name="getSubjectbalance" class="subjectbalanceAction" method="getSubjectbalance">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	<!-- 查询科目退款明细
+	访问地址：localhost:8080/pjsys/getSubjectrefund.action?
+	 -->
+		<action name="getSubjectrefund" class="subjectrefundAction" method="getSubjectrefund">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 导出收支汇总
+	访问地址：localhost:8080/pjsys/downloadMoney.action?
+	 -->
+		<action name="downloadMoney" class="dwnloadAction" method="download">
+	</action>
+	<!-- 导出缴费明细
+	访问地址：localhost:8081/pjsys/download1.action?
+	 -->
+		<action name="download1" class="dwnload1Action" method="download1">
+	</action>
+	
+	<!-- 按班级导出缴费明细
+	访问地址：localhost:8080/pjsys/downMoney.action?classinfo_id=1
+	所需参数：classinfo_id  班级id
+	 -->
+	 <action name="downMoney" class="downMoneyAction" method="download1">
+				
+		</action>
+		<action name="downMoney" class="downMoneyAction" method="download1">
+	</action>
+	<!-- 导出科目收支明细
+	访问地址：localhost:8080/pjsys/download2.action?
+	 -->
+		<action name="download2" class="dwnload2Action" method="download2">
+	</action>
+	<!-- 导出科目退款明细
+	访问地址：localhost:8080/pjsys/download3.action?
+	 -->
+		<action name="download3" class="dwnload3Action" method="download3">
+	</action>
+	<!-- 缴费明细分页
+	访问地址：localhost:8080/pjsys/find.action?
+	 -->
+		<action name="find" class="paymentAction" method="find">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	<!-- 按班级查询缴费明细分页
+	访问地址：localhost:8080/pjsys/findMoneyByClass.action?classinfo_id=1&page=1&flag=
+	所需参数：classinfo_id  班级id
+			page    页码
+			flag  费用状态
+			
+//        flag = 1 = '已报名未缴费';
+//        flag = 2 = '已申请缴费,未缴费';
+//        flag = 3 = '已缴费';
+//        flag = 4 = '已退班';
+//        flag = 5 = '已申请退费';
+//        flag = 6 = '已成功退费';
+//        flag = 7 = '未申请续费';
+//        flag = 8 = '已申请续费';
+//        flag = 9 = '已成功续费';
+	 -->
+		<action name="findMoneyByClass" class="paymentAction" method="find1">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 查询缴费续费退费总人数
+	访问地址：localhost:8080/pjsys/findMoneyRenCount.action?flag=
+	所需参数：
+			flag  费用状态
+			
+//        flag = 1 = '已报名未缴费';
+//        flag = 2 = '已申请缴费,未缴费';
+//        flag = 3 = '已缴费';
+//        flag = 4 = '已退班';
+//        flag = 5 = '已申请退费';
+//        flag = 6 = '已成功退费';
+//        flag = 7 = '未申请续费';
+//        flag = 8 = '已申请续费';
+//        flag = 9 = '已成功续费';
+	 -->
+		<action name="findMoneyRenCount" class="paymentAction" method="jxtCount">
+			<result type="json">
+				<param name="root">countRen</param>
+			</result>
+	</action>
+	
+	<!-- 科目明细分页
+	访问地址：localhost:8080/pjsys/find1.action?page=1
+	 -->
+		<action name="find1" class="subjectbalanceAction" method="find1">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	<!-- 科目退款明细分页
+	访问地址：localhost:8080/pjsys/find2.action?
+	 -->
+		<action name="find2" class="subjectrefundAction" method="find2">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+
+	<!-- 查询所有面试的学生
+	访问地址：http://localhost:8080/pjsys/findResult1.action?page=1
+	 -->
+	<action name="findResult1" class="interview_infoAction" method="findResult1">
+			<result type="json">
+			<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 按照面试科目查询所有面试的学生
+	访问地址：http://localhost:8080/pjsys/findByInterview.action?interview_id=1&page=1
+	所需参数：interview_id 面试科目id
+			page     页码
+	 -->
+	<action name="findByInterview" class="interview_infoAction" method="findByInterview">
+			<result type="json">
+			<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 教师端根据姓名查询学生 
+	访问地址：http://localhost:8080/pjsys/show1.action?stuName=？
+	所需参数：stuName  学生姓名
+	-->
+	 	<action name="show1" class="interview_infoAction" method="show1">
+			<result type="json">
+				<param name="root">interview_info</param>
+			</result>
+	</action> 
+	
+	<!-- 统计班级管理已经放进去的学生数量。 
+	访问地址：http://localhost:8080/pjsys/CountStudentByClassInfoId.action?classinfo_id=8
+	所需参数：classinfo_id  班级id
+	-->
+	<action name="CountStudentByClassInfoId" class="countAction" method="CountStudentByClassInfoId">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action> 
+	
+	<!-- 财务给学生添加备注 
+	访问地址：http://localhost:8080/pjsys/updateFlag.action?id=？&flags=?
+	所需参数：id  选课记录id
+	      flags  备注
+	-->
+	<action name="updateFlag" class="infoAction" method="updateFlag">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action> 
+	
+	<!-- 导出功能（当前班级下的学生列表） 
+	访问地址：http://localhost:8080/pjsys/download.action?classinfo_id=?
+	所需参数：classinfo_id  班级id
+	-->
+	<action name="download" class="downloadInfo">
+			<result type="stream">
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename=${filename}</param>
+				<param name="contentType">${contentType}</param>
+			</result>
+		</action>
+	<!-- 导出功能（所有报名信息学生列表） 
+	访问地址：http://localhost:8080/pjsys/downloadAllStudentInfo.action?
+	-->
+		<action name="downloadAllStudentInfo" class="downloadAllStudentInfoAction">
+			<result type="stream">
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename=${filename}</param>
+				<param name="contentType">${contentType}</param>
+			</result>
+		</action>
+		<!-- <action name="counts" class="countsAction" >
+			<result type="json">
+				<param name="root">classinfo</param>
+			</result>
+	</action>  -->
+	
+		<!-- 教师端缴费审核时按姓名查询学生
+	47.100.31.2/pjsys/show4.action?stuName=?
+	所需参数：stuName  姓名
+	 -->
+	<action name="show4" class="infoAction" method="show1">
+			<result type="json">
+				<param name="root">info</param>
+			</result>
+	</action>
+	
+	
+		<!-- 教师端续费审核时按姓名查询学生
+	47.100.31.2/pjsys/show2.action?stuName=?
+	所需参数：stuName  姓名
+	 -->
+	<action name="show2" class="infoAction" method="show2">
+			<result type="json">
+				<param name="root">info</param>
+			</result>
+	</action>
+	
+	
+		<!-- 教师端退费审核时按姓名查询学生
+	47.100.31.2/pjsys/show3.action?stuName=?
+	所需参数：stuName  姓名
+	 -->
+	<action name="show3" class="infoAction" method="show3">
+			<result type="json">
+				<param name="root">info</param>
+			</result>
+	</action>
+	
+	
+		<!--教师端查看学生考勤汇总
+		访问地址：http://localhost:8080/pjsys/attendancesummary.action?page=1&classinfo_id=2
+		所需参数：classinfo_id 班级id
+				page 页码
+		-->
+	<action name="attendancesummary" class="attenceAction" method="Attendancesummary">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	<!-- 访问地址：http://localhost:8080/pjsys/attendancesummary1.action?page=1&classinfo_id=1 -->
+	<action name="attendancesummary1" class="attenceAction" method="Attendancesummary1">
+			<result type="json">
+				<param name="root">att2</param>
+			</result>
+	</action>
+	
+	<!-- 导出学生考勤汇总
+	访问地址：localhost:8080/pjsys/download4.action?classinfo_id=2
+	所需参数：classinfo_id 班级id
+	 -->
+		<action name="download4" class="download4Action" method="download4">
+	<result type="json">
+				<param name="root">attence</param>
+			</result>
+	</action>
+	
+	<!-- 教室已配置班级和时间段
+	访问地址：localhost:8080/pjsys/findRoom.action?classroom_id=1
+	所需参数：classroom_id  教室id
+	 -->
+	<action name="findRoom" class="classinfoAction" method="findRoom">
+	<result type="json">
+				<param name="root">classinfo1</param>
+			</result>
+	</action>
+	
+	<!-- 教室占用率
+	访问地址：localhost:8080/pjsys/percent.action?classroom_id=1
+	所需参数：classroom_id  教室id
+	 -->
+	<action name="percent" class="classroominfoAction" method="percent">
+	<result type="json">
+				<param name="root">results</param>
+			</result>
+	</action>
+	
+	<!-- 新增账户
+	访问地址：http://localhost:8080/pjsys/addTeacher.action?username=aaa&password=123&role=1
+	所需参数：username  账户名称
+			password 密码
+			role  角色 
+	 -->
+	<action name="addTeacher" class="administratorAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	
+	<!-- 修改账户
+	访问地址：http://localhost:8080/pjsys/updateTeacher.action?id=1&username=aaa&password=123&role=1
+	所需参数：   id       账户id
+			username  账户名称
+			password 密码
+			role  角色 
+	 -->
+	<action name="updateTeacher" class="administratorAction" method="update">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 删除账户
+	访问地址：http://localhost:8080/pjsys/deleteTeacher.action?id=1
+	所需参数：id   账户id	  
+	 -->
+	<action name="deleteTeacher" class="administratorAction" method="delete">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 管理员账户列表
+	访问地址：http://localhost:8080/pjsys/findAllTeacher.action?
+	 -->
+	<action name="findAllTeacher" class="administratorAction" method="findAll">
+			<result type="json">
+				<param name="root">teachers</param>
+			</result>
+	</action>
+	
+	<!-- 日志
+	访问地址：http://localhost:8080/pjsys/findAllLog.action?page=1
+	所需参数：page  页码
+	 -->
+	<action name="findAllLog" class="logAction" method="findAll">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	
+	<!-- =========================================按全体开始==================================== -->
+	<!-- 发送站内信
+	访问地址：http://localhost:8080/pjsys/addMessage.action?imessage.head=test&imessage.message=hello&teacher_id=1
+	所需参数：   imessage.head 标题
+			imessage.message 消息内容
+			teacher_id  教师id
+	 -->
+	<action name="addMessage" class="imessageAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 显示站内信
+	访问地址：http://localhost:8080/pjsys/findMessage.action?user_id=1621&page=1
+	所需参数：user_id   家长id
+		   page      页码
+	 -->
+	<action name="findMessage" class="imessageAction" method="find">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 
+		显示站内信 前三条信息 
+		访问地址：http://localhost:8080/pjsys/queryFirstThreeByImessage?user_id=1621
+		所需参数：user_id   家长id
+	 -->
+	<action name="queryFirstThreeByImessage" class="imessageAction" method="queryFirstThreeByImessage">
+			<result type="json">
+				<param name="root">Imessages</param>
+			</result>
+	</action>
+	
+	<!-- 标记站内信已读
+	访问地址：http://localhost:8080/pjsys/updateFlagMessage.action?id=?
+	所需参数：id    站内信id
+	 -->
+	<action name="updateFlagMessage" class="imessageAction" method="updateFlag">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 标记站内信已读(多选)
+	访问地址：http://localhost:8080/pjsys/updateFlagBySelect.action?ids=2187,2188,2189&flag=1
+	所需参数：ids    站内信id的集合
+		   flag   站内信状态（已读）
+	 -->
+	<action name="updateFlagBySelect" class="imessageAction" method="updateFlagBySelect">
+			<result type="json"> 
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 站内信查看详情
+	访问地址：http://localhost:8080/pjsys/XQMessage.action?id=?
+	所需参数：  id    站内信id
+	 -->
+	<action name="XQMessage" class="imessageAction" >
+			<result type="json">
+				<param name="root">imessage</param>
+			</result>
+	</action>
+	
+	<!-- 站内信删除消息
+	访问地址：http://localhost:8080/pjsys/deleteMessage.action?id=?
+	所需参数：id    站内信id
+	 -->
+	<action name="deleteMessage" class="imessageAction" method="delete">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 站内信删除消息（多选）
+	访问地址：http://localhost:8080/pjsys/deleteAll.action?ids=2190,2091
+	所需参数：id    站内信id
+	 -->
+	<action name="deleteAll" class="imessageAction" method="deleteAll">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 站内信未读数
+	访问地址：http://localhost:8080/pjsys/countMessage.action?user_id=?
+	所需参数：user_id   家长id
+	 -->
+	<action name="countMessage" class="imessageAction" method="count">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	<!-- =========================================按全体结束==================================== -->
+	
+	<!-- =========================================按班级 开始==================================== -->
+	<!-- 发送站内信
+	访问地址：http://localhost:8080/pjsys/addimessageByClass.action?classinfo_ids=1,2,3&imessageByClass.head=test&imessageByClass.message=hello&teacher_id=1
+	所需参数：   classinfo_ids   班级id的集合
+			imessage.head 标题
+			imessage.message 消息内容
+			teacher_id  教师id
+	 -->
+	<action name="addimessageByClass" class="imessageByClassAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 显示站内信
+	访问地址：http://localhost:8080/pjsys/findimessageByClass.action?stu_id=261&page=1
+	所需参数：stu_id   学生id
+		   page      页码
+	 -->
+	<action name="findimessageByClass" class="imessageByClassAction" method="find">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 标记站内信已读
+	访问地址：http://localhost:8080/pjsys/updateFlagByClass.action?id=14
+	所需参数：id    站内信id
+	 -->
+	<action name="updateFlagByClass" class="imessageByClassAction" method="updateFlag">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 站内信查看详情
+	访问地址：http://localhost:8080/pjsys/XQMessageByClass.action?id=14
+	所需参数：  id    站内信id
+	 -->
+	<action name="XQMessageByClass" class="imessageByClassAction" >
+			<result type="json">
+				<param name="root">imessageByClass</param>
+			</result>
+	</action>
+	
+	<!-- 站内信删除消息
+	访问地址：http://localhost:8080/pjsys/deleteMessageByClass.action?id=14
+	所需参数：id    站内信id
+	 -->
+	<action name="deleteMessageByClass" class="imessageByClassAction" method="delete">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- =========================================按班级 结束==================================== -->
+
+	
+	
+	<!-- =========================================按面试 开始==================================== -->
+	<!-- 发送站内信
+	访问地址：http://localhost:8080/pjsys/addImessageByInter.action?imessageByInter.head=test&imessageByInter.message=hello&teacher_id=1
+	所需参数：  
+			imessage.head 标题
+			imessage.message 消息内容
+			teacher_id  教师id
+	 -->
+	<action name="addImessageByInter" class="imessageByInterAction" method="add">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 显示站内信
+	访问地址：http://localhost:8080/pjsys/findImessageByInter.action?stu_id=51&page=1
+	所需参数：stu_id   学生id
+		   page      页码
+	 -->
+	<action name="findImessageByInter" class="imessageByInterAction" method="find">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 标记站内信已读
+	访问地址：http://localhost:8080/pjsys/updateFlagByClass.action?id=14
+	所需参数：id    站内信id
+	 -->
+	<action name="updateFlagByInter" class="imessageByInterAction" method="updateFlag">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	<!-- 站内信查看详情
+	访问地址：http://localhost:8080/pjsys/XQMessageByInter.action?id=5
+	所需参数：  id    站内信id
+	 -->
+	<action name="XQMessageByInter" class="imessageByInterAction" >
+			<result type="json">
+				<param name="root">imessageByInter</param>
+			</result>
+	</action>
+	
+	<!-- 站内信删除消息
+	访问地址：http://localhost:8080/pjsys/deleteMessageByClass.action?id=14
+	所需参数：id    站内信id
+	 -->
+	<action name="deleteMessageByInter" class="imessageByInterAction" method="delete">
+			<result type="json">
+				<param name="root">result</param>
+			</result>
+	</action>
+	
+	
+	
+	<!-- =========================================按班级面试 结束==================================== -->
+	
+	<!-- 图片库 start -->
+	
+	<!-- 
+		上传图片
+		http://47.100.31.2/pjsys/47.100.31.2/pjsys/pictureUpLoad? file & teacher_id
+		file 是传递的文件属性名称
+		teacher_id 	老师id
+		
+		部署了2个tomcat 如果换tomcat那么必须要把该接口修改
+		
+		成功返回 pictureFlag = 1
+	 -->
+	<action name="pictureUpLoad" class="pictureLibraryAction" method="pictureUpLoad">
+			<result type="json">
+				<param name="root">pictureFlag</param>
+			</result>
+	</action>
+	
+	<!-- 
+		上传图片
+		http://47.100.31.2/pjsys/47.100.31.2/pjsys/firstOnePicture
+	 -->
+	<action name="firstOnePicture" class="pictureLibraryAction" method="firstOnePicture">
+			<result type="json">
+				<param name="root">pictureLibrary</param>
+			</result>
+	</action>
+	
+	<!-- 图片库 end -->
+	
+	
+	
+	<!-- 教务端 修改 start -->
+	
+	<!-- 
+		/**
+		 *  合并班级 
+		 *  
+		 *  classinfo_id; // 班级ID
+		 *	classinfo_id_clear; //清空的班级id
+		 *  classinfo_flag // 返回 1 成功 0 失败
+		 *
+		 *	访问地址：http://localhost:8080/pjsys/mergeClassinfo?classinfo_id= & classinfo_id_clear=
+		 */
+	 -->
+	<action name="mergeClassinfo" class="classinfoAction" method="mergeClassinfo">
+			<result type="json">
+				<param name="root">classinfo_flag</param>
+			</result>
+	</action>
+	
+	<!-- 教务端 修改 end -->
+	
+	
+	<!-- 班主任 start -->
+	
+	<!-- 
+		/**
+		 *  分页查询 
+		 *
+		 *	访问地址：http://localhost:8080/pjsys/queryPageHeadMaster?pageNum=1&pageSize=10
+		 *	pageNum 多少页
+		 *	pageSize 一页多少条信息
+		 */
+	 -->
+	<action name="queryPageHeadMaster" class="headMasterAction" method="queryPageHeadMaster">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action>
+	
+	<!-- 
+		/**
+		 *   添加 
+		 *
+		 *	访问地址：http://localhost:8080/pjsys/addHeadMaster?name=小明&sex=男&card=321654987321&phonenumber=123456789&comment=111
+		 *	name,  sex,  card,  phonenumber,  comment 
+		 */
+	 -->
+	<action name="addHeadMaster" class="headMasterAction" method="addHeadMaster">
+			<result type="json">
+				<param name="root">flag</param>
+			</result>
+	</action>
+	
+	<!-- 
+		/**
+		 *    修改
+		 *
+		 *	访问地址：http://localhost:8080/pjsys/updateHeadMaster?id=1&name=小明&sex=男&card=321654987321&phonenumber=123456789&comment=111
+		 *	id , name,  sex,  card,  phonenumber,  comment 
+		 */
+	 -->
+	<action name="updateHeadMaster" class="headMasterAction" method="updateHeadMaster">
+			<result type="json">
+				<param name="root">flag</param>
+			</result>
+	</action>
+	
+	
+	<!-- 
+		/**
+		 *  查看未分配班主任的班级
+		 *  没有班主任的班级  
+		 *
+		 *	访问地址：http://localhost:8080/pjsys/classinfoInheadmaster_idIsNull
+		 */
+	 -->
+	<action name="classinfoInheadmaster_idIsNull" class="headMasterAction" method="classinfoInheadmaster_idIsNull">
+			<result type="json">
+				<param name="root">classinfoList</param>
+			</result>
+	</action>
+	
+	<!-- 
+		/**
+		 *
+		 *	访问地址：http://localhost:8080/pjsys/classinfoInheadmaster_idIsTrue?id=1
+		  *  查看指定班主任的班级
+		  *  传递班主任id
+		 */
+	 -->
+	<action name="classinfoInheadmaster_idIsTrue" class="headMasterAction" method="classinfoInheadmaster_idIsTrue">
+			<result type="json">
+				<param name="root">classinfoList</param>
+			</result>
+	</action>
+	
+	
+	<!-- 
+		/**
+		 *	访问地址：http://localhost:8080/pjsys/classinfoClearheadmaster_id?classinfo_id=1
+		 *
+		 *	 清空指定班级 里的 班主任关联
+		 *  classinfo_id  班级id
+		 *
+		 */
+	 -->
+	<action name="classinfoClearheadmaster_id" class="headMasterAction" method="classinfoClearheadmaster_id">
+			<result type="json">
+				<param name="root">flag</param>
+			</result>
+	</action>
+	
+		<!-- 
+		/**
+		 *	访问地址：http://localhost:8080/pjsys/classinfoUpdateheadmaster_id?classinfo_id=1&id=3
+		  *  指定班级添加班主任
+		 *  classinfo_id 班级id
+		 *   id  班主任id
+		 */
+	 -->
+	<action name="classinfoUpdateheadmaster_id" class="headMasterAction" method="classinfoUpdateheadmaster_id">
+			<result type="json">
+				<param name="root">flag</param>
+			</result>
+	</action>
+	
+	
+	<!-- 
+		/**
+		 *	访问地址：http://localhost:8080/pjsys/findAllHeadMaster
+		  *  查询所有的 班主任
+		 */
+	 -->
+	<action name="findAllHeadMaster" class="headMasterAction" method="findAllHeadMaster">
+			<result type="json">
+				<param name="root">headMasterList</param>
+			</result>
+	</action>
+	
+	
+	<!-- 
+		/**
+		 *	访问地址：http://localhost:8080/pjsys/deleteHeadMaster?id=1
+		  *   删除 
+	 	 * 传递参数  id  班主任id
+		 */
+	 -->
+	<action name="deleteHeadMaster" class="headMasterAction" method="deleteHeadMaster">
+			<result type="json">
+				<param name="root">flag</param>
+			</result>
+	</action>
+	
+	<!-- 班主任 end -->
+	
+	
+	<!-- 
+		/**
+		 *	访问地址：http://localhost:8080/pjsys/classinfoClearStudent?classinfo_id=
+		  *    清空班级下的所有学生
+		 *    
+		 *  传递参数 classinfo_id 班级 id
+		 * 
+		 * 返回参数 classinfo_flag
+		 */
+	 -->
+	 <action name="classinfoClearStudent" class="com.shketai.action.ClassinfoAction" method="classinfoClearStudent">
+	 	<result type="json">
+	 		<param name="root">classinfo_flag</param>
+	 	</result>
+	 </action>
+	 
+	
+	<!-- 
+		/** 
+		 *  导出学生模板
+		 *	访问地址：http://localhost:8080/pjsys/downloadStudent 
+		 */
+	 -->
+	 <action name="downloadStudent" class="com.shketai.action.DownloadStudent" method="downloadStudent">
+	 </action>
+	 
+	 <!-- 
+		/** 
+		 *   导入学生模板
+		 *	访问地址：http://localhost:8080/pjsys/loadStudentExcel?classinfo_id
+		 *   传递参数 classinfo_id 班级id   和excel文件
+		  * 	flag  1=关联成功  0=关联失败  -1=不存在
+		 */
+	 -->
+	 <action name="loadStudentExcel" class="com.shketai.action.DownloadStudent" method="loadStudentExcel">
+		<result type="json">
+			<param name="root">studentList</param>
+		</result>
+	 </action>
+	
+	
+	<!--   清空面试审核
+		访问地址：http://localhost:8080/pjsys/interview_infoInclear_flag
+	-->
+ 	<action name="interview_infoInclear_flag" class="interview_infoAction" method="interview_infoInclear_flag">
+			<result type="json">
+				<param name="root">flag</param>
+			</result>
+	</action> 
+	
+	<!--  班级考勤数据汇总
+		访问地址：http://localhost:8080/pjsys/queryClassinfoInAttence?pageNum=1&pageSize=10&my_classname=
+		
+		传递参数: pageNum 页码
+	   			 pageSize 数量
+	 	  		 my_classname 班级名称
+	 
+	 	返回参数: 
+	 		//	实勤人数 onPerson
+			//	缺勤人数 unPerson;
+			//	未到人数 notPerson
+ 	 		//	额定人数 number
+    	 	//	已配置人数 count 
+	-->
+ 	<action name="queryClassinfoInAttence" class="classinfoAction" method="queryClassinfoInAttence">
+			<result type="json">
+				<param name="root">pb</param>
+			</result>
+	</action> 
+	
+	<!-- 
+		 传递 班级id 得到缺勤 的考勤记录 
+		  访问地址：http://localhost:8080/pjsys/unAttenceMessage?classinfo_id=1
+		  传递参数 classinfo_id
+	-->
+ 	<action name="unAttenceMessage" class="attenceAction" method="unAttenceMessage">
+			<result type="json">
+				<param name="root">att</param>
+			</result>
+	</action> 
+	
+	
+	<!-- 
+		 下载 缴费学生 模板
+		  访问地址：http://localhost:8080/pjsys/downloadStudentPayment
+	-->
+ 	<action name="downloadStudentPayment" class="com.shketai.action.DownloadStudentPaymentA" method="downloadStudentPayment">
+	</action> 
+	
+		<!-- 
+		 读取 缴费学生 excel
+		  访问地址：http://localhost:8080/pjsys/loadStudentPaymentExcel
+	-->
+ 	<action name="loadStudentPaymentExcel" class="com.shketai.action.DownloadStudentPaymentA" method="loadStudentPaymentExcel">
+ 			<result type="json">
+				<param name="root">studentList</param>
+			</result>
+	</action> 
+	
+	
+	<!--查询指定姓名 的 学生 并且和 班级没有关联
+		访问地址：http://localhost:8080/pjsys/queryStuNameNotInfo?stuName=王某
+		传递参数  stuName 学生姓名
+	-->
+	<action name="queryStuNameNotInfo" class="studentAction" method="queryStuNameNotInfo">
+			<result type="json">
+				<param name="root">student1</param>
+			</result>
+	</action>
+	
+	<!--  	添加 学生 和 班级 关联
+	
+			访问地址：http://ip:8080/pjsys/addInfoInClass_idStu_idFlag?flag=&my_classinfo_id=&my_stu_id=
+			 * 传递参数 
+			 * 	my_flag 缴费状态
+			 * 	my_classinfo_id 班级id
+			 * 	my_stu_id 学生id
+			 返回参数
+			 	info_flag 1 成功
+			-->
+	<action name="addInfoInClass_idStu_idFlag" class="infoAction" method="addInfoInClass_idStu_idFlag">
+			<result type="json">
+				<param name="root">info_flag</param>
+			</result>
+	</action>
+	
+	
+	<!--  	下载 本星期所有班级考勤
+	
+			访问地址：localhost:8080/pjsys/downloadStudentAttence
+	-->
+	<action name="downloadStudentAttence" class="com.shketai.action.DownloadStudent" method="downloadStudentAttence"></action>
+	
+	
+	<!--  	下载 开始 到 结束 时间所有班级考勤
+	
+			访问地址：localhost:8080/pjsys/downloadStudentAttenceStartAndEnd?startTime=2018-9-11&endTime=2018-9-16
+			传递参数
+	 *  	startTime 开始时间
+	 *  	endTime	结束时间
+	-->
+	<action name="downloadStudentAttenceStartAndEnd" class="com.shketai.action.DownloadStudent" method="downloadStudentAttenceStartAndEnd"></action>
+	
+	
+	<!--    
+		访问地址：localhost:8080/pjsys/submitNotice?content=111
+			
+		 添加 通知
+	 *  
+	 *  传递参数 :
+	 *  	content
+	 *  
+	 *  返回参数:
+	 *  	flag =1 成功
+	-->
+	<action name="submitNotice" class="com.shketai.action.NoticeAction" method="submitNotice">
+		<result type="json">
+			<param name="root">flag</param>
+		</result>
+	</action>
+	
+	
+	<!--    
+	
+		访问地址：localhost:8080/pjsys/firstNoticeMessage
+			
+			/**
+	 *  第一条 通知
+	 *  
+	 *  传递参数 :
+	 *  	
+	 *  返回参数 :
+	 *  	
+	 */
+	-->
+	<action name="firstNoticeMessage" class="com.shketai.action.NoticeAction" method="firstNoticeMessage">
+		<result type="json">
+			<param name="root">notice</param>
+		</result>
+	</action>
+	
+	
+	<!-- 更新班级下 的 info flag
+		访问地址：localhost:8080/pjsys/infoUpdateClassinfo_idsByflag
+		 * 传递参数：
+		 * 	classinfo_ids 班级id 逗号拼接
+		 * 	my_flag 状态
+		 *返回参数：
+		 *	
+		 * info_flag = 1
+		 */
+	-->
+	<action name="infoUpdateClassinfo_idsByflag" class="infoAction" method="infoUpdateClassinfo_idsByflag">
+			<result type="json">
+				<param name="root">info_flag</param>
+			</result>
+	</action>
+	
+	
+	<!-- 
+		/**
+		 * spell 7天内没有考情 
+		 * 访问地址：localhost:8080/pjsys/spellFindByClassinfoId?spell_stu_name=w&page=1
+		 * 传递参数：
+		 * 	spell_stu_name
+		 * 	page
+		 * 
+		 * 返回参数：
+		 * 	pb
+		 * 
+		 */
+	  -->
+	<action name="spellFindByClassinfoId" class="com.shketai.action.InfoAction" method="spellFindByClassinfoId">
+		<result type="json">
+			<param name="root">pb</param>
+		</result>
+	</action>
+	
+	<!-- 
+		/**
+		  * 更新词典
+		 * 访问地址：localhost:8080/pjsys/updateAllDictionary
+		 * 
+		 */
+	  -->
+	<action name="updateAllDictionary" class="com.shketai.action.DictionaryAction" method="updateAllDictionary">
+		<result type="json">
+			<param name="root">flag</param>
+		</result>
+	</action>
+	
+	<!-- 
+		导出日志
+	  -->
+	<action name="downloadLogsAction" class="com.shketai.action.DownloadLogsAction" method="download1"></action>
+	
+</package>
+</struts>
